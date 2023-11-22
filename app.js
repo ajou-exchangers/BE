@@ -1,28 +1,44 @@
 const express = require("express");
+const session = require("express-session");
+const mongoose = require("mongoose");
 const morgan = require("morgan");
-const dotenv = require("dotenv");
-const connect = require("./models/index");
+require("dotenv").config();
 
-dotenv.config();
+const errorHandler = require("./middlewares/errorHandler");
 
-const locationRouter = require("./routes/location");
 const app = express();
-const port = 8000;
-connect();
+const port = 3000;
 
-app.use(morgan("dev"));
+mongoose
+	.connect("mongodb://localhost:27017/exchangers")
+	.then(() => console.log("Successfully connected to MongoDB"))
+	.catch((error) => console.error("Connection error", error));
+
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(
+	session({
+		name: "exchangers.sid",
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: false, // http도 허용
+			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
+		},
+	})
+);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
+const locationRouter = require("./routes/location");
+
+app.use("/api/exchangers/v1", indexRouter);
+app.use("/api/exchangers/v1/auth", authRouter);
 app.use("/locations",locationRouter);
 
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({err: err.message? err.message:"server error"});
-});
+app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+	console.log(`App listening at http://localhost:${port}`);
 });
