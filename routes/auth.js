@@ -10,5 +10,6 @@ const {
 router.post("/signup", checkNotAuthenticated, authController.signupUser);
 router.post("/signin", checkNotAuthenticated, authController.loginUser);
 router.post("/signout", checkAuthenticated, authController.logoutUser);
+router.get("/check-nickname/:nickname", authController.checkNicknameDup);
 
 module.exports = router;
