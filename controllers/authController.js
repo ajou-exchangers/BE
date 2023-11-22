@@ -23,7 +23,6 @@ exports.signupUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
 	try {
 		const user = await findUser(req.body.email, req.body.password);
-		console.log(user);
 		if (user) {
 			req.session.userId = user._id;
 			res.status(200).send("user logged in");
