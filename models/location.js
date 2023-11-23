@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const validCategories = ['restaurant', 'cafe', 'hospital', 'pharmacy', 'bank', 'other'];
+const onlyWhiteSpaceRegex = /^\s+$/;
 
 const locationSchema = new mongoose.Schema({
     koName: {
@@ -8,7 +9,7 @@ const locationSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (value) {
-                return value !== '' && value !== null;
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
             },
             message: props => 'koName must not be empty or null.',
         },
@@ -19,7 +20,7 @@ const locationSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (value) {
-                return value !== '' && value !== null;
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
             },
             message: props => 'koAddress must not be empty or null.',
         },
@@ -34,7 +35,7 @@ const locationSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (value) {
-                return value !== '' && value !== null;
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
             },
             message: props => 'description must not be empty or null.',
         },
