@@ -6,7 +6,7 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
     try {
-        const locations = LocationService.readLocation();
+        const locations = await LocationService.readLocations();
         res.json(locations);
     } catch (err) {
         next(err);
@@ -15,12 +15,7 @@ exports.readLocations = async (req, res, next) => {
 
 exports.readLocation = async (req, res, next) => {
     try {
-        const location = await Location.findById(req.params.id);
-        if (!location) {
-            const error = new Error("not found location");
-            error.status = 404;
-            return next(error)
-        }
+        const location = await LocationService.readLocation(req.params.id);
         res.json(location);
     } catch (err) {
         next(err);
@@ -31,7 +26,7 @@ exports.applyLocation = async (req, res, next) => {
     try {
         const locationApplyRequest = new LocationApplyRequest(req.body);
         await LocationService.applyLocation(locationApplyRequest, req.session.userId);
-        res.json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
+        res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
     } catch (err) {
         next(err);
     }
