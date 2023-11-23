@@ -4,7 +4,9 @@ const {checkAuthenticated} = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.get("/",readLocations)
-router.post("/",checkAuthenticated,applyLocation);
+//당분간 로그인이 필요없는 장소등록으로 배포
+// router.post("/",checkAuthenticated,applyLocation);
+router.post("/",applyLocation)
 router.get("/:id",readLocation);
 
 
