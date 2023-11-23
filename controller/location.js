@@ -6,7 +6,7 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
     try {
-        const locations = await Location.find();
+        const locations = LocationService.readLocation();
         res.json(locations);
     } catch (err) {
         next(err);
