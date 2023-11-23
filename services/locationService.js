@@ -1,4 +1,4 @@
-const Location = require("../models/location");
+const Location = require("../models/Location");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");

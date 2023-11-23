@@ -1,6 +1,5 @@
 const LocationApplyRequest = require("../dto/LocationApplyRequest")
 const LocationService = require("../services/locationService");
-const Location = require("../models/location");
 const Response = require("../dto/response/Response");
 const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
