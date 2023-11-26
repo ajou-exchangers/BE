@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const errorHandler = require("./middlewares/errorHandler");
@@ -14,6 +15,7 @@ mongoose
 	.catch((error) => console.error("Connection error", error));
 
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(
 	session({
 		name: "exchangers.sid",
@@ -29,9 +31,11 @@ app.use(
 
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
+const locationRouter = require("./routes/location");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);
+app.use("/api/exchangers/v1//locations",locationRouter);
 
 app.use(errorHandler);
 
