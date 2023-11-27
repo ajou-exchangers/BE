@@ -7,7 +7,7 @@ class LocationApplyRequest {
                     kioskAvailable,
                     parkingAvailable,
                     englishSpeaking,
-                    restroomAvailable,
+                    wifiAvailable,
                     description,
                     category,
                     image,
@@ -21,7 +21,7 @@ class LocationApplyRequest {
         this.kioskAvailable = kioskAvailable;
         this.parkingAvailable = parkingAvailable;
         this.englishSpeaking = englishSpeaking;
-        this.restroomAvailable = restroomAvailable;
+        this.wifiAvailable = wifiAvailable;
         this.description = description;
         this.category = category;
         this.image = image;
