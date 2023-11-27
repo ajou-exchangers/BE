@@ -1,29 +1,29 @@
 const Review = require("../models/review");
-const Location = require("../models/Location");
 const WriteReviewRequest = require("../dto/review/WriteReivewRequest");
 const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
+const ReviewService = require("../services/reviewService");
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
+const Response = require("../dto/response/Response");
 
 exports.writeReview = async (req,res,next) => {
     try {
-        const location = await Location.findById(req.params.locationId);
-        if(!location){
-            const error = new Error("not found location");
-            error.status = 404;
-            return next(error);
-        }
-        const review = new WriteReviewRequest(req.body);
-        const reviewDoc = await Review.create(
-            {
-                location: location.id,
-                ...review
-            }
-        );
-        await reviewDoc.save();
-        res.json({message: 'Review created successfully'});
+        const reviewRequest = new WriteReviewRequest(req.body);
+        await ReviewService.writeReview(reviewRequest,req.params.locationId, "655e0b2fd0493f6fccbd3a6c");
+        res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
     }catch (err){
         next(err);
     }
 }
+
+// exports.writeReview = async (req,res,next) => {
+//     try {
+//         const reviewRequest = new WriteReviewRequest(req.body);
+//         await ReviewService.writeReview(reviewRequest,req.params.locationId, req.session.userId);
+//         res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
+//     }catch (err){
+//         next(err);
+//     }
+// }
 
 exports.updateReview = async (req,res,next) => {
     try {

@@ -40,10 +40,10 @@ const reviewRouter = require("./routes/review");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);
-app.use("/api/exchangers/v1//locations", locationRouter);
-app.use("/admin",adminRouter);
-app.use("/keywords",keywordRouter);
-app.use("/reviews",reviewRouter);
+app.use("/api/exchangers/v1/locations", locationRouter);
+app.use("/api/exchangers/v1/admin",adminRouter);
+app.use("/api/exchangers/v1/keywords",keywordRouter);
+app.use("/api/exchangers/v1/reviews",reviewRouter);
 
 app.use(errorHandler);
 
