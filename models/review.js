@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
+const onlyWhiteSpaceRegex = /^\s+$/;
+
 const reviewSchema = new mongoose.Schema({
     location: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Location', // Assuming your location schema is named 'Location'
+        ref: 'Location',
         required: true,
     },
     rating: {
@@ -11,25 +13,38 @@ const reviewSchema = new mongoose.Schema({
         required: true,
         min: 1,
         max: 5,
+        validate:{
+            validator: function (value){
+                return value !== null && value >=1 && value <=5;
+            },
+            message: props => 'rating must not be empty or null. ( rating value : 1 ~ 5 )'
+        }
     },
     keywords: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Keyword',
         validate: {
             validator: function (value) {
-                return value.length <= 5; // Maximum of 5 keywords
+                return value.length <= 5;
             },
             message: 'Maximum of 5 keywords allowed.',
         },
     },
     review: {
         type: String,
-    },
-    photos: {
-        type: [String], // Array of photo URLs
+        required: true,
         validate: {
             validator: function (value) {
-                return value.length <= 3; // Maximum of 3 photos
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
+            },
+            message: props => 'review must not be empty or null.',
+        },
+    },
+    photos: {
+        type: [String],
+        validate: {
+            validator: function (value) {
+                return value.length <= 3;
             },
             message: 'Maximum of 3 photos allowed.',
         },
