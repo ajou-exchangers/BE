@@ -1,5 +1,5 @@
 const Location = require("../models/Location");
-const Review = require("../models/review");
+const Review = require("../models/Review");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");

@@ -1,4 +1,4 @@
-const ReviewController = require("../models/review");
+const ReviewController = require("../models/Review");
 const WriteReviewRequest = require("../dto/review/WriteReivewRequest");
 const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
 const ReviewService = require("../services/reviewService");

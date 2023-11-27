@@ -1,4 +1,4 @@
-const Keyword = require("../models/keyword");
+const Keyword = require("../models/Keyword");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 
