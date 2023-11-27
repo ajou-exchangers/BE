@@ -1,5 +1,5 @@
 const Review = require("../models/review");
-const Location = require("../models/location");
+const Location = require("../models/Location");
 const WriteReviewRequest = require("../dto/review/WriteReivewRequest");
 const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
 

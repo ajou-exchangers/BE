@@ -1,4 +1,4 @@
-const Location = require("../models/location");
+const Location = require("../models/Location");
 const AddLocationRequest = require("../dto/admin/AddLocationRequest");
 const UpdateLocationRequest = require("../dto/admin/UpdateLocationRequest")
 
