@@ -1,4 +1,4 @@
-const Review = require("../models/review");
+const ReviewController = require("../models/review");
 const WriteReviewRequest = require("../dto/review/WriteReivewRequest");
 const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
 const ReviewService = require("../services/reviewService");
@@ -28,7 +28,7 @@ exports.writeReview = async (req,res,next) => {
 exports.updateReview = async (req,res,next) => {
     try {
         const updateReviewRequest = new UpdateReviewRequest(req.body);
-        const review = await Review.findByIdAndUpdate(req.params.id,updateReviewRequest);
+        const review = await ReviewController.findByIdAndUpdate(req.params.id,updateReviewRequest);
         if(!review){
             const error = new Error("not found review");
             error.status = 404;
@@ -60,13 +60,13 @@ exports.getReviewsByLocation = async (req,res,next) => {
 
 exports.deleteReview = async (req,res,next) => {
     try {
-        const review = await Review.findById(req.params.id);
+        const review = await ReviewController.findById(req.params.id);
         if(!review){
             const error = new Error("not found review");
             error.status = 404;
             return next(error);
         }
-        await Review.deleteOne(review);
+        await ReviewController.deleteOne(review);
         res.json({result:"delete review"});
     }catch (err){
         next(err);

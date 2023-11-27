@@ -35,7 +35,7 @@ const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
 const adminRouter = require("./routes/admin");
-const keywordRouter = require("./routes/Keyword");
+const keywordRouter = require("./routes/keyword");
 const reviewRouter = require("./routes/review");
 
 app.use("/api/exchangers/v1", indexRouter);
