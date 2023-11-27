@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
+const validCategories = ['restaurant', 'cafe', 'hospital', 'pharmacy', 'bank', 'other'];
+
 const keywordSchema = new mongoose.Schema({
     category: {
         type: String,
-        enum: ['hospital', 'restaurant', 'cafe'],
+        enum: validCategories,
         required: true,
     },
     keyword: {
