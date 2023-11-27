@@ -1,11 +1,11 @@
-const Keyword = require("../models/keyword");
 const KeywordService = require("../services/keywordService")
+const Response = require("../dto/response/Response");
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.createKeyword = async (req, res, next) => {
     try {
-        const keywordDoc = await Keyword.create(req.body);
-        const keyword = await keywordDoc.save();
-        res.json(keyword);
+        await KeywordService.createKeyword(req.body);
+        res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
     } catch (err) {
         next(err);
     }
