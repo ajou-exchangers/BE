@@ -8,7 +8,7 @@ const Response = require("../dto/response/Response");
 exports.writeReview = async (req,res,next) => {
     try {
         const reviewRequest = new WriteReviewRequest(req.body);
-        await ReviewService.writeReview(reviewRequest,req.params.locationId, "655e0b2fd0493f6fccbd3a6c");
+        await ReviewService.writeReview(reviewRequest,req.params.locationId, "65648f6cd79e3deb83b73dc1");
         res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
     }catch (err){
         next(err);
@@ -51,7 +51,7 @@ exports.getReviews = async (req,res,next) => {
 
 exports.getReviewsByLocation = async (req,res,next) => {
     try {
-        const reviews = await Review.find({location:req.params.locationId}).populate('keywords');
+        const reviews = await ReviewService.getReviewsByLocation(req.params.locationId);
         res.json(reviews);
     }catch (err){
         next(err);
