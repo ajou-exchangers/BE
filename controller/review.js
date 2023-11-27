@@ -42,7 +42,7 @@ exports.updateReview = async (req,res,next) => {
 
 exports.getReviews = async (req,res,next) => {
     try {
-        const reviews = await Review.find().populate('keywords');
+        const reviews = await ReviewService.getReviews();
         res.json(reviews);
     }catch (err){
         next(err);

@@ -7,7 +7,7 @@ const ERROR_MESSAGE = require("../constants/errorMessage");
 exports.writeReview = async (reviewRequest, locationId, userId) => {
     try {
         const location = await Location.findById(locationId);
-        if(!location){
+        if (!location) {
             throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
         }
 
@@ -19,9 +19,20 @@ exports.writeReview = async (reviewRequest, locationId, userId) => {
             }
         );
         await reviewDoc.save();
-    }catch (e){
+    } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
         }
     }
+}
+
+// 테스트를 위해 user 조회 제외
+// exports.getReviews = async () => {
+//     const reviews = await Review.find().populate('keywords').populate('user').sort({createAt:-1});
+//     return reviews;
+// }
+
+exports.getReviews = async () => {
+    const reviews = await Review.find().populate('keywords').sort({createAt:-1});
+    return reviews;
 }
