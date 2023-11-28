@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const validCategories = ['Restaurant', 'Cafe', 'pharmacy', 'Bank', 'Convenience store'];
+const validCategories = ['Restaurant', 'Cafe', 'Pharmacy', 'Bank', 'Convenience store'];
 const onlyWhiteSpaceRegex = /^\s+$/;
 
 const locationSchema = new mongoose.Schema({
