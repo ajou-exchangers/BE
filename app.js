@@ -38,7 +38,7 @@ const boardRouter = require("./routes/board");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);
-app.use("/api/exchangers/v1//locations", locationRouter);
+app.use("/api/exchangers/v1/locations", locationRouter);
 app.use("/api/exchangers/v1/board", boardRouter);
 
 app.use(errorHandler);
