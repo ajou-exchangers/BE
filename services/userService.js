@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/user");
+const User = require("../models/User");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 
@@ -19,7 +19,7 @@ exports.findUserByNickname = async (nickname) => {
 };
 
 exports.createUser = async (email, password, nickname, profile) => {
-	existUser = await this.findUser(email);
+	existUser = await User.findOne({ email });
 	if (existUser)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "User already exists");
 	const hashedPasswd = await bcrypt.hash(password, 10);

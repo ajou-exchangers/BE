@@ -37,18 +37,24 @@ exports.loginUser = async (req, res, next) => {
 	}
 };
 
-exports.logoutUser = (req, res, next) => {
+exports.logoutUser = async (req, res, next) => {
 	try {
-		req.session.destroy((error) => {
-			if (error) {
-				throw CustomError(
-					ERROR_CODES.INTERNAL_SERVER_ERROR,
-					"Failed to destroy session"
-				);
-			}
-			res.clearCookie("exchangers.sid");
-			res.status(200).send("user logged out");
+		await new Promise((resolve, reject) => {
+			req.session.destroy((error) => {
+				if (error) {
+					reject(
+						CustomError(
+							ERROR_CODES.INTERNAL_SERVER_ERROR,
+							"Failed to destroy session"
+						)
+					);
+				} else {
+					resolve();
+				}
+			});
 		});
+		res.clearCookie("exchangers.sid");
+		res.status(200).send("user logged out");
 	} catch (error) {
 		next(error);
 	}
