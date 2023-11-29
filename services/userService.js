@@ -32,8 +32,9 @@ exports.createUser = async (email, password, nickname, profile) => {
 			ERROR_CODES.BAD_REQUEST,
 			"Email, password, nickname are required"
 		);
-	existUser = await User.findOne({ email });
-	if (existUser)
+	dupEmailUser = await User.findOne({ email });
+	dupNicknameUser = await User.findOne({ nickname });
+	if (dupEmailUser || dupNicknameUser)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "User already exists");
 	const hashedPasswd = await bcrypt.hash(password, 10);
 	const user = new User({
