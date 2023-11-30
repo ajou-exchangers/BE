@@ -36,6 +36,14 @@ app.post("/upload", upload.array("images"), async (req, res) => {
   const imageUrls = req.files.map((file) => file.location);
   res.json({ imageUrls });
 });
+
+다양한 유형의 데이터
+app.post("/uploadPost", upload.single("image"), async (req, res) => {
+  const postText = req.body.text; // "text" 필드의 데이터
+  console.log(postText);
+  const imageUrl = req.file ? req.file.location : null; // "image" 필드의 파일 URL
+  res.json({ postText, imageUrl });
+});
  */
 
 module.exports = upload;
