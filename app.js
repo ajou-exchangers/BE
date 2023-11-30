@@ -34,10 +34,16 @@ app.use(
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
+const adminRouter = require("./routes/admin");
+const keywordRouter = require("./routes/keyword");
+const reviewRouter = require("./routes/review");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);
 app.use("/api/exchangers/v1/locations", locationRouter);
+app.use("/api/exchangers/v1/admin",adminRouter);
+app.use("/api/exchangers/v1/keywords",keywordRouter);
+app.use("/api/exchangers/v1/reviews",reviewRouter);
 
 app.use(errorHandler);
 
