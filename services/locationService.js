@@ -28,9 +28,9 @@ exports.readLocation = async (locationId) => {
     return location;
 }
 
-exports.applyLocation = async (applyLocationRequest, userId) => {
+exports.applyLocation = async (applyLocationRequest, userId, image) => {
     try {
-        const location = await Location.create({...applyLocationRequest, user: userId});
+        const location = await Location.create({...applyLocationRequest, user: userId, image});
         await location.save();
     } catch (e) {
         if (e.name === "ValidationError") {

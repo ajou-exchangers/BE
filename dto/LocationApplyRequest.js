@@ -10,7 +10,6 @@ class LocationApplyRequest {
                     wifiAvailable,
                     description,
                     category,
-                    image,
                     latitude,
                     longitude
                 }) {
@@ -24,7 +23,6 @@ class LocationApplyRequest {
         this.wifiAvailable = wifiAvailable;
         this.description = description;
         this.category = category;
-        this.image = image;
         this.latitude = latitude;
         this.longitude = longitude;
         this.isVisible = false;
