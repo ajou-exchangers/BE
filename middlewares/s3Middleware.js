@@ -20,4 +20,22 @@ const upload = multer({
     }),
 });
 
+/*
+사용방법
+
+이미지 1개 업로드
+app.post("/upload", upload.single("img"), async (req, res) => {
+  console.log(req.file);
+  res.json({ imageUrl: req.file.location });
+});
+
+이미지 복수개 업로드
+app.post("/upload", upload.array("images"), async (req, res) => {
+  console.log(req.files);
+
+  const imageUrls = req.files.map((file) => file.location);
+  res.json({ imageUrls });
+});
+ */
+
 module.exports = upload;
