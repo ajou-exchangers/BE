@@ -5,7 +5,7 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 exports.createKeyword = async (req, res, next) => {
     try {
         await KeywordService.createKeyword(req.body);
-        res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
+        res.status(201).json(new Response(RESPONSE_MESSAGE.WRITE_REVIEW));
     } catch (err) {
         next(err);
     }
