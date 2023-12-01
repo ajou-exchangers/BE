@@ -3,6 +3,8 @@ const Review = require("../models/Review");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
+const ReviewController = require("../models/Review");
 
 exports.writeReview = async (reviewRequest, locationId, userId, images) => {
     try {
@@ -47,4 +49,17 @@ exports.getReviews = async () => {
 exports.getReviewsByLocation = async (locationId) => {
     const reviews = await Review.find({location: locationId}).populate('keywords').sort({createdAt: -1});
     return reviews;
+}
+
+exports.updateReview = async (updateReviewRequest, id, images) => {
+    try {
+        const review = await ReviewController.findByIdAndUpdate(id, {...updateReviewRequest, images: images});
+        if (!review) {
+            throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.REVIEW_NOT_FOUND);
+        }
+    } catch (e) {
+        if (e.name === "ValidationError") {
+            throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        }
+    }
 }

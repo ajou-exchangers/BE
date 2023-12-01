@@ -1,9 +1,8 @@
 class UpdateReviewRequest {
-    constructor({rating, keywords, review, photos}) {
+    constructor({rating, keywords, review}) {
         this.rating = rating;
         this.keywords = keywords;
         this.review = review;
-        this.photos = photos;
     }
 }
 
