@@ -40,7 +40,7 @@ const reviewSchema = new mongoose.Schema({
             message: props => 'review must not be empty or null.',
         },
     },
-    photos: {
+    images: {
         type: [String],
         validate: {
             validator: function (value) {

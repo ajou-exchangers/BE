@@ -4,7 +4,7 @@ const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 
-exports.writeReview = async (reviewRequest, locationId, userId) => {
+exports.writeReview = async (reviewRequest, locationId, userId, images) => {
     try {
         const location = await Location.findById(locationId);
         if (!location) {
@@ -15,6 +15,7 @@ exports.writeReview = async (reviewRequest, locationId, userId) => {
             {
                 location: location.id,
                 user: userId,
+                images: images,
                 ...reviewRequest
             }
         );
