@@ -5,7 +5,10 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
     try {
-        const locations = await LocationService.readLocations();
+        const searchParam = req.query.search;
+        const categoryParam = req.query.category;
+
+        const locations = await LocationService.readLocations(searchParam, categoryParam);
         res.json(locations);
     } catch (err) {
         next(err);

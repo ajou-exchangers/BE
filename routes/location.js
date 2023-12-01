@@ -9,5 +9,4 @@ router.get("/",locationController.readLocations)
 router.post("/",locationController.applyLocation)
 router.get("/:id",locationController.readLocation);
 
-
 module.exports = router;
