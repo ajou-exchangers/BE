@@ -1,15 +1,16 @@
 const { divideHangul, normalize} = require("hangul-util");
 
-class LocationApplyRequest {
+class AddLocationRequest {
     constructor({
                     koName,
                     koAddress,
                     kioskAvailable,
                     parkingAvailable,
                     englishSpeaking,
-                    wifiAvailable,
+                    restroomAvailable,
                     description,
                     category,
+                    image,
                     latitude,
                     longitude
                 }) {
@@ -20,13 +21,14 @@ class LocationApplyRequest {
         this.kioskAvailable = kioskAvailable;
         this.parkingAvailable = parkingAvailable;
         this.englishSpeaking = englishSpeaking;
-        this.wifiAvailable = wifiAvailable;
+        this.restroomAvailable = restroomAvailable;
         this.description = description;
         this.category = category;
+        this.image = image;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.isVisible = false;
+        this.isVisible = true;
     }
 }
 
-module.exports = LocationApplyRequest;
+module.exports = AddLocationRequest;

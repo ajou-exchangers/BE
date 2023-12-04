@@ -3,8 +3,20 @@ const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 
-exports.readLocations = async () => {
-    const latestLocations = await Location.find().sort({createdAt: -1});
+exports.readLocations = async (searchParam, categoryParam) => {
+    const baseQuery = categoryParam ? {category: categoryParam} : {};
+
+    if (searchParam) {
+        const searchTermWithoutSpaces = searchParam.replace(/\s/g, '');
+        const searchRegexString = searchTermWithoutSpaces.split('').join('.*');
+        const searchRegex = new RegExp(searchRegexString, 'i');
+        console.log(searchRegex);
+        baseQuery.$or = [
+            {koName: {$regex: searchRegex}},
+            {enName: {$regex: searchRegex}},
+        ];
+    }
+    const latestLocations = await Location.find(baseQuery).sort({createdAt: -1});
     return latestLocations;
 }
 
@@ -16,9 +28,9 @@ exports.readLocation = async (locationId) => {
     return location;
 }
 
-exports.applyLocation = async (applyLocationRequest, userId) => {
+exports.applyLocation = async (applyLocationRequest, userId, image) => {
     try {
-        const location = await Location.create({...applyLocationRequest, user: userId});
+        const location = await Location.create({...applyLocationRequest, user: userId, image});
         await location.save();
     } catch (e) {
         if (e.name === "ValidationError") {

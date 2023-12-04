@@ -5,7 +5,10 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
     try {
-        const locations = await LocationService.readLocations();
+        const searchParam = req.query.search;
+        const categoryParam = req.query.category;
+
+        const locations = await LocationService.readLocations(searchParam, categoryParam);
         res.json(locations);
     } catch (err) {
         next(err);
@@ -34,8 +37,9 @@ exports.readLocation = async (req, res, next) => {
 
 exports.applyLocation = async (req, res, next) => {
     try {
+        const imageUrl = req.file ? req.file.location : null;
         const locationApplyRequest = new LocationApplyRequest(req.body);
-        await LocationService.applyLocation(locationApplyRequest, "655e0b2fd0493f6fccbd3a6c");
+        await LocationService.applyLocation(locationApplyRequest, "655e0b2fd0493f6fccbd3a6c", imageUrl);
         res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
     } catch (err) {
         next(err);
