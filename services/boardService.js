@@ -23,7 +23,7 @@ exports.findPost = async (postId) => {
 	}));
 };
 
-exports.createPost = async (title, content, imageUrl) => {
+exports.createPost = async (req, title, content, imageUrl) => {
 	const post = new Post({
 		title,
 		content,

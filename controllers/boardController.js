@@ -29,7 +29,7 @@ exports.createPost = async (req, res, next) => {
 	try {
 		const imageUrl = req.file ? req.file.location : null;
 		const { title, content } = req.body;
-		const post = await createPost(title, content, imageUrl);
+		const post = await createPost(req, title, content, imageUrl);
 		res.status(201).json(post);
 	} catch (error) {
 		next(error);
