@@ -26,7 +26,7 @@ exports.findUserByNickname = async (nickname) => {
 	return await User.findOne({ nickname });
 };
 
-exports.createUser = async (email, password, nickname, profile) => {
+exports.createUser = async (email, password, nickname, imageUrl) => {
 	if (!email || !password || !nickname)
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
@@ -41,7 +41,7 @@ exports.createUser = async (email, password, nickname, profile) => {
 		email,
 		password: hashedPasswd,
 		nickname,
-		profile,
+		profile: imageUrl,
 	});
 	await user.save();
 };
