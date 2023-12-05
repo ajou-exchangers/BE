@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const CustomError = require("../utils/CustomError");
 
 exports.findPosts = async () => {
 	const posts = await Post.find().populate("author", "nickname");
@@ -43,10 +44,10 @@ exports.updatePost = async (req, postId, title, content) => {
 	await post.save();
 };
 
-exports.deletePost = async (postId) => {
+exports.deletePost = async (req, postId) => {
 	const post = await Post.findById(postId);
 	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
 	if (post.author != req.session.userId)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
-	await post.delete();
+	await post.deleteOne();
 };
