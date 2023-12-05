@@ -40,7 +40,7 @@ exports.updatePost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
 		const { title, content } = req.body;
-		await updatePost(postId, title, content);
+		await updatePost(req, postId, title, content);
 		res.status(200).send("post updated");
 	} catch (error) {
 		next(error);

@@ -33,11 +33,11 @@ exports.createPost = async (req, title, content, imageUrl) => {
 	await post.save();
 };
 
-exports.updatePost = async (postId, title, content) => {
+exports.updatePost = async (req, postId, title, content) => {
 	const post = await Post.findById(postId);
 	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
 	if (post.author != req.session.userId)
-		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
+		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not the author");
 	post.title = title;
 	post.content = content;
 	await post.save();

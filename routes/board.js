@@ -13,7 +13,12 @@ router.post(
 	upload.single("image"),
 	boardController.createPost
 );
-router.put("/:postId", checkAuthenticated, boardController.updatePost);
+router.put(
+	"/:postId",
+	checkAuthenticated,
+	upload.none(),
+	boardController.updatePost
+);
 router.delete("/:postId", checkAuthenticated, boardController.deletePost);
 
 module.exports = router;
