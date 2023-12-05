@@ -1,4 +1,3 @@
-const e = require("express");
 const Post = require("../models/Post");
 
 exports.findPosts = async () => {
@@ -24,8 +23,13 @@ exports.findPost = async (postId) => {
 	}));
 };
 
-exports.createPost = async (title, content) => {
-	const post = new Post({ title, content, author: req.session.userId });
+exports.createPost = async (title, content, imageUrl) => {
+	const post = new Post({
+		title,
+		content,
+		imageUrl,
+		author: req.session.userId,
+	});
 	await post.save();
 };
 
