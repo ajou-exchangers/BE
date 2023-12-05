@@ -2,6 +2,7 @@ const Location = require("../models/Location");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const axios = require('axios');
 
 exports.readLocations = async (searchParam, categoryParam) => {
     const baseQuery = categoryParam ? {category: categoryParam} : {};
@@ -10,7 +11,7 @@ exports.readLocations = async (searchParam, categoryParam) => {
         const searchTermWithoutSpaces = searchParam.replace(/\s/g, '');
         const searchRegexString = searchTermWithoutSpaces.split('').join('.*');
         const searchRegex = new RegExp(searchRegexString, 'i');
-        console.log(searchRegex);
+        // console.log(searchRegex);
         baseQuery.$or = [
             {koName: {$regex: searchRegex}},
             {enName: {$regex: searchRegex}},
@@ -30,7 +31,19 @@ exports.readLocation = async (locationId) => {
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
     try {
-        const location = await Location.create({...applyLocationRequest, user: userId, image});
+        const apiUrl = 'https://openapi.naver.com/v1/papago/n2mt';
+        const response = await axios.post(apiUrl,{
+            text:applyLocationRequest.koName,
+            source:"ko",
+            target:"en",
+        },{
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
+                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
+            },
+        })
+        const location = await Location.create({...applyLocationRequest, user: userId, image, enName:response.data.message.result.translatedText});
         await location.save();
     } catch (e) {
         if (e.name === "ValidationError") {
