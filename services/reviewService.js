@@ -3,7 +3,6 @@ const Review = require("../models/Review");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
-const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
 const ReviewController = require("../models/Review");
 
 exports.writeReview = async (reviewRequest, locationId, userId, images) => {
@@ -26,12 +25,15 @@ exports.writeReview = async (reviewRequest, locationId, userId, images) => {
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+            return;
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
 }
 
 exports.getReviews = async () => {
-    const reviews = await Review.find().populate('keywords').populate('user').sort({createAt:-1});
+    const reviews = await Review.find().populate('keywords').populate('user').sort({createAt: -1});
     return reviews;
 }
 
@@ -46,15 +48,29 @@ exports.getReviewsByLocation = async (locationId) => {
     return reviews;
 }
 
-exports.updateReview = async (updateReviewRequest, id, images) => {
+exports.updateReview = async (updateReviewRequest, reviewId, images, userId) => {
     try {
-        const review = await ReviewController.findByIdAndUpdate(id, {...updateReviewRequest, images: images});
+        const review = await ReviewController.findOneAndUpdate({_id: reviewId, user: userId}, {
+            ...updateReviewRequest,
+            images: images
+        });
         if (!review) {
             throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.REVIEW_NOT_FOUND);
         }
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
+}
+
+exports.deleteReview = async (reviewId, userId) => {
+    const review = await ReviewController.findOne({_id:reviewId, user:userId});
+    if (!review) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.REVIEW_NOT_FOUND);
+        return;
+    }
+    await ReviewController.deleteOne(review);
 }

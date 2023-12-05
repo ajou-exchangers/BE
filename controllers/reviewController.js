@@ -20,7 +20,7 @@ exports.updateReview = async (req, res, next) => {
     try {
         const images = req.files?.map((file) => file.location).length > 0 ? req.files?.map((file) => file.location) : req.body.images;
         const updateReviewRequest = new UpdateReviewRequest(req.body);
-        await ReviewService.updateReview(updateReviewRequest, req.params.id, images)
+        await ReviewService.updateReview(updateReviewRequest, req.params.id, images, req.session.userId)
         res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REVIEW));
     } catch (e) {
         next(e);
@@ -47,14 +47,8 @@ exports.getReviewsByLocation = async (req, res, next) => {
 
 exports.deleteReview = async (req, res, next) => {
     try {
-        const review = await ReviewController.findById(req.params.id);
-        if (!review) {
-            const error = new Error("not found review");
-            error.status = 404;
-            return next(error);
-        }
-        await ReviewController.deleteOne(review);
-        res.json({result: "delete review"});
+        await ReviewService.deleteReview(req.params.id,req.session.userId);
+        res.json(new Response(RESPONSE_MESSAGE.DELETE_REVIEW));
     } catch (err) {
         next(err);
     }
