@@ -30,7 +30,7 @@ exports.createPost = async (req, res, next) => {
 		const imageUrl = req.file ? req.file.location : null;
 		const { title, content } = req.body;
 		const post = await createPost(req, title, content, imageUrl);
-		res.status(201).json(post);
+		res.status(201).json("post created");
 	} catch (error) {
 		next(error);
 	}
