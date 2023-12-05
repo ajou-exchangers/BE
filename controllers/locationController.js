@@ -24,22 +24,11 @@ exports.readLocation = async (req, res, next) => {
     }
 }
 
-// 당분간 로그인이 필요없는 장소등록으로 배포
-// exports.applyLocation = async (req, res, next) => {
-//     try {
-//         const locationApplyRequest = new LocationApplyRequest(req.body);
-//         await LocationService.applyLocation(locationApplyRequest, req.session.userId);
-//         res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
-//     } catch (err) {
-//         next(err);
-//     }
-// }
-
 exports.applyLocation = async (req, res, next) => {
     try {
         const imageUrl = req.file ? req.file.location : null;
         const locationApplyRequest = new LocationApplyRequest(req.body);
-        await LocationService.applyLocation(locationApplyRequest, "655e0b2fd0493f6fccbd3a6c", imageUrl);
+        await LocationService.applyLocation(locationApplyRequest, req.session.userId, imageUrl);
         res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
     } catch (err) {
         next(err);
