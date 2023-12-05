@@ -5,15 +5,13 @@ const {
 } = require("../services/userService");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
+const LoginResponse = require("../dto/response/LoginResponse");
 
 exports.signupUser = async (req, res, next) => {
 	try {
-		await createUser(
-			req.body.email,
-			req.body.password,
-			req.body.nickname,
-			req.body.profile // TODO: s3 upload
-		);
+		const imageUrl = req.file ? req.file.location : null;
+		const { email, password, nickname } = req.body;
+		await createUser(email, password, nickname, imageUrl);
 		res.status(201).send("user created");
 	} catch (error) {
 		next(error);
@@ -22,10 +20,11 @@ exports.signupUser = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
 	try {
-		const user = await findUser(req.body.email, req.body.password);
+		const { email, password } = req.body;
+		const user = await findUser(email, password);
 		if (user) {
 			req.session.userId = user._id;
-			res.status(200).send("user logged in");
+			res.status(200).json(new LoginResponse(user));
 		} else {
 			throw CustomError(
 				ERROR_CODES.UNAUTHORIZED,
