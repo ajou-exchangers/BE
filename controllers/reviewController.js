@@ -16,22 +16,12 @@ exports.writeReview = async (req, res, next) => {
     }
 }
 
-// exports.writeReview = async (req,res,next) => {
-//     try {
-//         const reviewRequest = new WriteReviewRequest(req.body);
-//         await ReviewService.writeReview(reviewRequest,req.params.locationId, req.session.userId);
-//         res.status(201).json(new Response(new Response(RESPONSE_MESSAGE.WRITE_REVIEW)));
-//     }catch (err){
-//         next(err);
-//     }
-// }
-
 exports.updateReview = async (req, res, next) => {
     try {
-        const images = req.files.map((file) => file.location);
+        const images = req.files?.map((file) => file.location).length > 0 ? req.files?.map((file) => file.location) : req.body.images;
         const updateReviewRequest = new UpdateReviewRequest(req.body);
-        await ReviewService.updateReview(updateReviewRequest, req.params.id,images)
-        res.status(200).json(new Response(RESPONSE_MESSAGE.WRITE_REVIEW));
+        await ReviewService.updateReview(updateReviewRequest, req.params.id, images)
+        res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REVIEW));
     } catch (e) {
         next(e);
     }
