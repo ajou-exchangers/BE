@@ -1,3 +1,4 @@
+
 const LocationApplyRequest = require("../dto/LocationApplyRequest")
 const LocationUpdateRequest = require("../dto/location/LocationUpdateRequest")
 const LocationService = require("../services/locationService");
@@ -5,25 +6,28 @@ const Response = require("../dto/response/Response");
 const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
-    try {
-        const searchParam = req.query.search;
-        const categoryParam = req.query.category;
+	try {
+		const searchParam = req.query.search;
+		const categoryParam = req.query.category;
 
-        const locations = await LocationService.readLocations(searchParam, categoryParam);
-        res.json(locations);
-    } catch (err) {
-        next(err);
-    }
-}
+		const locations = await LocationService.readLocations(
+			searchParam,
+			categoryParam
+		);
+		res.json(locations);
+	} catch (err) {
+		next(err);
+	}
+};
 
 exports.readLocation = async (req, res, next) => {
-    try {
-        const location = await LocationService.readLocation(req.params.id);
-        res.json(location);
-    } catch (err) {
-        next(err);
-    }
-}
+	try {
+		const location = await LocationService.readLocation(req.params.id);
+		res.json(location);
+	} catch (err) {
+		next(err);
+	}
+};
 
 exports.applyLocation = async (req, res, next) => {
     try {
