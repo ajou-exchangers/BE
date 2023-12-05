@@ -9,7 +9,7 @@ exports.writeReview = async (req, res, next) => {
     try {
         const images = req.files.map((file) => file.location);
         const reviewRequest = new WriteReviewRequest(req.body);
-        await ReviewService.writeReview(reviewRequest, req.params.locationId, "65648f6cd79e3deb83b73dc1", images);
+        await ReviewService.writeReview(reviewRequest, req.params.locationId, req.session.userId, images);
         res.status(201).json(new Response(RESPONSE_MESSAGE.WRITE_REVIEW));
     } catch (err) {
         next(err);
