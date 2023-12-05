@@ -50,7 +50,7 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
-		await deletePost(postId);
+		await deletePost(req, postId);
 		res.status(200).send("post deleted");
 	} catch (error) {
 		next(error);
