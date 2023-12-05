@@ -14,7 +14,6 @@ class LocationApplyRequest {
                     longitude
                 }) {
         this.koName = koName;
-        this.enName = normalize(this.koName,false);
         this.koAddress = koAddress;
         this.enAddress = normalize(this.koAddress,false);
         this.kioskAvailable = kioskAvailable;
