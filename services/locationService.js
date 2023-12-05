@@ -6,6 +6,7 @@ const axios = require('axios');
 const Review = require("../models/Review");
 const calculateAverageRating = require('../utils/ReviewAverage');
 const LocationReadResponse = require('../dto/location/LocationReadResponse');
+const LocationUpdate = require('../models/LocationUpate');
 
 exports.readLocations = async (searchParam, categoryParam) => {
     const baseQuery = categoryParam ? {category: categoryParam} : {};
@@ -53,6 +54,34 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
         })
         const location = await Location.create({...applyLocationRequest, user: userId, image, enName:response.data.message.result.translatedText});
         await location.save();
+    } catch (e) {
+        if (e.name === "ValidationError") {
+            throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        }
+    }
+}
+
+exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
+    const location = await Location.findById(locationId);
+    if (!location) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
+        return;
+    }
+    try {
+        const apiUrl = 'https://openapi.naver.com/v1/papago/n2mt';
+        const response = await axios.post(apiUrl,{
+            text:locationUpdateRequest.koName,
+            source:"ko",
+            target:"en",
+        },{
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
+                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
+            },
+        })
+        const locationUpdate = await LocationUpdate.create({...locationUpdateRequest, user: userId, enName:response.data.message.result.translatedText, location:location._id});
+        await locationUpdate.save();
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);

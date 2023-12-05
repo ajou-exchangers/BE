@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/",locationController.readLocations)
 router.post("/",checkAuthenticated,upload.single("image"),locationController.applyLocation)
+router.put("/:id",checkAuthenticated,upload.single("image"),locationController.updateLocation)
 router.get("/:id",locationController.readLocation);
 
 module.exports = router;
