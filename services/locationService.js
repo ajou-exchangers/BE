@@ -57,6 +57,8 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
 }
@@ -85,6 +87,8 @@ exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
 }
