@@ -31,8 +31,8 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			secure: true, // http도 허용
-			sameSite: "none",
+			secure: false, // http도 허용
+			sameSite: "None",
 			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
 		},
 	})
