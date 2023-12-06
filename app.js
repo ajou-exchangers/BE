@@ -32,7 +32,7 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: false, // http도 허용
-			sameSite: "none",
+			// sameSite: "none",
 			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
 		},
 	})
