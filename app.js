@@ -29,8 +29,9 @@ app.use(
 		name: "exchangers.sid",
 		secret: process.env.SESSION_SECRET,
 		resave: false,
-		saveUninitialized: false,
+		saveUninitialized: true,
 		cookie: {
+			httpOnly : true,
 			secure: true, // http도 허용
 			sameSite: "none",
 			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
