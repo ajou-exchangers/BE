@@ -6,7 +6,6 @@ const commentSchema = new Schema({
 	author: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
 	createdAt: { type: Date, default: Date.now },
-	parentComment: { type: Schema.Types.ObjectId, ref: "Comment" },
 	likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
