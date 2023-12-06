@@ -10,18 +10,25 @@ exports.findPosts = async () => {
 	}));
 };
 
-exports.findPost = async (postId) => {
+exports.findPost = async (req, postId) => {
 	const post = await Post.findById(postId)
 		.populate("author", "nickname")
-		.populate("comments", "author content createdAt");
-	return post.map((post) => ({
+		.populate({
+			path: "comments",
+			populate: { path: "author", select: "nickname" },
+			select: "content createdAt likes",
+		});
+	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+
+	return {
 		...post._doc,
 		comments: post.comments.map((comment) => ({
 			...comment._doc,
 			likes: comment.likes.length,
 		})),
 		likes: post.likes.length,
-	}));
+		liked: post.likes.includes(req.session.userId),
+	};
 };
 
 exports.createPost = async (req, title, content, imageUrl) => {
@@ -50,4 +57,16 @@ exports.deletePost = async (req, postId) => {
 	if (post.author != req.session.userId)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
 	await post.deleteOne();
+};
+
+exports.likePost = async (req, postId) => {
+	const post = await Post.findById(postId);
+	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+
+	const liked = post.likes.includes(req.session.userId);
+	if (liked) post.likes.pull(req.session.userId);
+	else post.likes.push(req.session.userId);
+
+	await post.save();
+	return !liked;
 };

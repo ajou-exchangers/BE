@@ -14,10 +14,16 @@ mongoose
 	.connect(process.env.DB_URL)
 	.then(() => console.log("Successfully connected to MongoDB"))
 	.catch((error) => console.error("Connection error", error));
+require("./models/User");
+require("./models/Post");
+require("./models/Comment");
+require("./models/Location");
+require("./models/Keyword");
+require("./models/Review");
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000", "http://localhost:5173"], credentials: true }));
 app.use(
 	session({
 		name: "exchangers.sid",
@@ -26,6 +32,7 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: false, // http도 허용
+			// sameSite: "none",
 			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
 		},
 	})
