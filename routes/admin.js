@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {acceptAddLocation, rejectAddLocation, deleteLocation, getNotAcceptedLocations} = require("../controller/admin");
+const {acceptAddLocation, rejectAddLocation, deleteLocation, getNotAcceptedLocations} = require("../controllers/adminController");
 
 router.delete("/locations/:id",deleteLocation);
 router.put("/locations-add/:id",acceptAddLocation);
