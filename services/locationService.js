@@ -31,7 +31,7 @@ exports.readLocation = async (locationId) => {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
         return;
     }
-    const reviews = await Review.find({location: locationId}).populate('keywords').sort({createdAt: -1});
+    const reviews = await Review.find({location: locationId}).populate('keywords').populate('user').sort({createdAt: -1});
     const reviewAverage = calculateAverageRating(reviews);
     const reviewCount = reviews.length;
     const locationResponse = new LocationReadResponse({location, reviews, reviewAverage, reviewCount});
