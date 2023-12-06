@@ -58,7 +58,7 @@ exports.updateReview = async (updateReviewRequest, reviewId, images, userId) => 
             images: images
         });
         if (!review) {
-            throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.REVIEW_NOT_FOUND);
+            throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.USER_RIVEW_NOT_FOUND);
         }
     } catch (e) {
         if (e.name === "ValidationError") {
@@ -70,9 +70,13 @@ exports.updateReview = async (updateReviewRequest, reviewId, images, userId) => 
 }
 
 exports.deleteReview = async (reviewId, userId) => {
-    const review = await ReviewController.findOne({_id:reviewId, user:userId});
+    const review = await ReviewController.findOne({_id:reviewId});
     if (!review) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.REVIEW_NOT_FOUND);
+        return;
+    }
+    if (review.user.toString() !== userId){
+        throw CustomError(ERROR_CODES.FORBIDDEN, ERROR_MESSAGE.FORBIDDEN_MESSAGE);
         return;
     }
     await ReviewController.deleteOne(review);
