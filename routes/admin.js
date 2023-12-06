@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {acceptAddLocation, rejectAddLocation, deleteLocation, getNotAcceptedLocations} = require("../controllers/adminController");
+const adminController = require("../controllers/adminController");
+const {checkAdminAuthenticated} = require("../middlewares/adminMiddleware");
+const {checkNotAuthenticated} = require("../middlewares/authMiddleware");
 
-router.delete("/locations/:id",deleteLocation);
-router.put("/locations-add/:id",acceptAddLocation);
-router.delete("/locations-add/:id",rejectAddLocation);
-router.get("/locations",getNotAcceptedLocations);
+router.delete("/locations/:id", adminController.deleteLocation);
+router.put("/locations-add/:id", adminController.acceptAddLocation);
+router.delete("/locations-add/:id", adminController.rejectAddLocation);
+router.get("/locations",checkAdminAuthenticated, adminController.getNotAcceptedLocations);
+router.post("/login", checkNotAuthenticated, adminController.adminLogin)
 
 module.exports = router;

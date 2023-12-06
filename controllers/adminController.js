@@ -1,6 +1,6 @@
 const Location = require("../models/Location");
-const AddLocationRequest = require("../dto/admin/AddLocationRequest");
-const UpdateLocationRequest = require("../dto/admin/UpdateLocationRequest")
+const LoginResponse = require("../dto/response/LoginResponse");
+const adminService = require("../services/adminService");
 
 exports.deleteLocation = async (req, res, next) => {
     try {
@@ -48,11 +48,21 @@ exports.rejectAddLocation = async (req, res, next) => {
     }
 }
 
-exports.getNotAcceptedLocations= async (req, res, next) => {
+exports.getNotAcceptedLocations = async (req, res, next) => {
     try {
-        const notAcceptedLocations = await Location.find({isVisible:false});
+        const notAcceptedLocations = await Location.find({isVisible: false});
         res.json(notAcceptedLocations);
     } catch (err) {
         next(err);
     }
 }
+
+exports.adminLogin = async (req, res, next) => {
+    try {
+        const user = await adminService.adminLogin({...req.body});
+        req.session.userId = user._id;
+        res.status(200).json(new LoginResponse(user));
+    } catch (error) {
+        next(error);
+    }
+};
