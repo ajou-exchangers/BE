@@ -10,8 +10,11 @@ exports.writeReview = async (reviewRequest, locationId, userId, images) => {
         const location = await Location.findById(locationId);
         if (!location) {
             throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
-            return;
         }
+        //장소 추가 수락 및 거절 구현하면 추가
+        // if (!location.isVisiable){
+        //     throw CustomError(ERROR_CODES.FORBIDDEN, ERROR_MESSAGE.FORBIDDEN_MESSAGE);
+        // }
 
         const reviewDoc = await Review.create(
             {
