@@ -31,7 +31,7 @@ exports.readLocation = async (locationId) => {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
         return;
     }
-    const reviews = await Review.find({location: locationId}).populate('keywords').sort({createdAt: -1});
+    const reviews = await Review.find({location: locationId}).populate('keywords').populate('user').sort({createdAt: -1});
     const reviewAverage = calculateAverageRating(reviews);
     const reviewCount = reviews.length;
     const locationResponse = new LocationReadResponse({location, reviews, reviewAverage, reviewCount});
@@ -57,6 +57,8 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
 }
@@ -85,6 +87,8 @@ exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
+        } else {
+            throw CustomError(e.status, e.message);
         }
     }
 }
