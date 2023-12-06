@@ -55,3 +55,12 @@ exports.deletePost = async (req, postId) => {
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
 	await post.deleteOne();
 };
+
+exports.likePost = async (req, postId) => {
+	const post = await Post.findById(postId);
+	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+	if (post.likes.includes(req.session.userId))
+		post.likes.pull(req.session.userId);
+	else post.likes.push(req.session.userId);
+	await post.save();
+};

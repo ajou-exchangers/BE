@@ -20,5 +20,6 @@ router.put(
 	boardController.updatePost
 );
 router.delete("/:postId", checkAuthenticated, boardController.deletePost);
+router.put("/:postId/like", checkAuthenticated, boardController.likePost);
 
 module.exports = router;

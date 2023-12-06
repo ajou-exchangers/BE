@@ -4,6 +4,7 @@ const {
 	createPost,
 	updatePost,
 	deletePost,
+	likePost,
 } = require("../services/boardService");
 
 exports.getBoard = async (req, res, next) => {
@@ -52,6 +53,16 @@ exports.deletePost = async (req, res, next) => {
 		const { postId } = req.params;
 		await deletePost(req, postId);
 		res.status(200).send("post deleted");
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.likePost = async (req, res, next) => {
+	try {
+		const { postId } = req.params;
+		await likePost(req, postId);
+		res.status(200).send("post liked");
 	} catch (error) {
 		next(error);
 	}
