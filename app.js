@@ -11,9 +11,9 @@ const app = express();
 const port = 3000;
 
 mongoose
-    .connect(process.env.DB_URL)
-    .then(() => console.log("Successfully connected to MongoDB"))
-    .catch((error) => console.error("Connection error", error));
+	.connect(process.env.DB_URL)
+	.then(() => console.log("Successfully connected to MongoDB"))
+	.catch((error) => console.error("Connection error", error));
 require("./models/User");
 require("./models/Post");
 require("./models/Comment");
@@ -23,20 +23,19 @@ require("./models/Review");
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors({origin: true, credentials: true, methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],}));
+app.use(cors({ origin: true, credentials: true }));
 app.use(
-    session({
-        name: "exchangers.sid",
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            httpOnly: false,
-            secure: true, // http도 허용
-            sameSite: "None",
-            maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
-        },
-    })
+	session({
+		name: "exchangers.sid",
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: true, // http도 허용
+			sameSite: "none",
+			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
+		},
+	})
 );
 
 const indexRouter = require("./routes/index");
@@ -60,5 +59,5 @@ app.use("/api/exchangers/v1/s3", s3Router);
 app.use(errorHandler);
 
 app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
+	console.log(`App listening at http://localhost:${port}`);
 });
