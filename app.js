@@ -29,7 +29,8 @@ app.use(
 		name: "exchangers.sid",
 		secret: process.env.SESSION_SECRET,
 		resave: false,
-		saveUninitialized: true,
+		saveUninitialized: false,
+		proxy:true,
 		cookie: {
 			httpOnly : true,
 			secure: true, // http도 허용
