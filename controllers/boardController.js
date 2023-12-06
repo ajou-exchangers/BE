@@ -19,7 +19,7 @@ exports.getBoard = async (req, res, next) => {
 exports.getPost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
-		const post = await findPost(postId);
+		const post = await findPost(req, postId);
 		res.status(200).json(post);
 	} catch (error) {
 		next(error);
@@ -61,8 +61,8 @@ exports.deletePost = async (req, res, next) => {
 exports.likePost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
-		await likePost(req, postId);
-		res.status(200).send("post liked");
+		liked = await likePost(req, postId);
+		res.status(200).send("post liked: " + liked);
 	} catch (error) {
 		next(error);
 	}
