@@ -1,6 +1,6 @@
 const { divideHangul, normalize} = require("hangul-util");
 
-class LocationApplyRequest {
+class LocationUpdateRequest {
     constructor({
                     koName,
                     koAddress,
@@ -11,7 +11,8 @@ class LocationApplyRequest {
                     description,
                     category,
                     latitude,
-                    longitude
+                    longitude,
+                    image,
                 }) {
         this.koName = koName;
         this.koAddress = koAddress;
@@ -24,8 +25,8 @@ class LocationApplyRequest {
         this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.isVisible = false;
+        this.image = image;
     }
 }
 
-module.exports = LocationApplyRequest;
+module.exports = LocationUpdateRequest;

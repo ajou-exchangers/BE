@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validCategories = ['Restaurant', 'Cafe', 'Pharmacy', 'Bank', 'Convenience store'];
 const onlyWhiteSpaceRegex = /^\s+$/;
 
-const locationSchema = new mongoose.Schema({
+const locationUpdateSchema = new mongoose.Schema({
     koName: {
         type: String,
         required: true,
@@ -14,7 +14,16 @@ const locationSchema = new mongoose.Schema({
             message: props => 'koName must not be empty or null.',
         },
     },
-    enName: {type: String},
+    enName: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
+            },
+            message: props => 'enName must not be empty or null.',
+        },
+    },
     koAddress: {
         type: String,
         required: true,
@@ -25,7 +34,16 @@ const locationSchema = new mongoose.Schema({
             message: props => 'koAddress must not be empty or null.',
         },
     },
-    enAddress: {type: String},
+    enAddress: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
+            },
+            message: props => 'enAddress must not be empty or null.',
+        },
+    },
     kioskAvailable: {type: Boolean, required: true},
     parkingAvailable: {type: Boolean, required: true},
     englishSpeaking: {type: Boolean, required: true},
@@ -51,10 +69,14 @@ const locationSchema = new mongoose.Schema({
     image: {type: String},
     latitude: {type: Number, required: true},
     longitude: {type: Number, required: true},
-    isVisible: {type: Boolean, required: true},
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
+    },
+    location:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Location',
         required: true,
     },
     createdAt: {
@@ -63,6 +85,6 @@ const locationSchema = new mongoose.Schema({
     },
 });
 
-const Location = mongoose.model('Location', locationSchema);
+const LocationUpdate = mongoose.model('LocationUpdate', locationUpdateSchema);
 
-module.exports = Location;
+module.exports = LocationUpdate;
