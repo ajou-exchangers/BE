@@ -13,15 +13,19 @@ exports.findPosts = async () => {
 exports.findPost = async (postId) => {
 	const post = await Post.findById(postId)
 		.populate("author", "nickname")
-		.populate("comments", "author content createdAt");
-	return post.map((post) => ({
+		.populate({
+			path: "comments",
+			populate: { path: "author", select: "nickname" },
+			select: "content createdAt likes",
+		});
+	return {
 		...post._doc,
 		comments: post.comments.map((comment) => ({
 			...comment._doc,
 			likes: comment.likes.length,
 		})),
 		likes: post.likes.length,
-	}));
+	};
 };
 
 exports.createPost = async (req, title, content, imageUrl) => {

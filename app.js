@@ -14,6 +14,12 @@ mongoose
 	.connect(process.env.DB_URL)
 	.then(() => console.log("Successfully connected to MongoDB"))
 	.catch((error) => console.error("Connection error", error));
+require("./models/User");
+require("./models/Post");
+require("./models/Comment");
+require("./models/Location");
+require("./models/Keyword");
+require("./models/Review");
 
 app.use(express.json());
 app.use(morgan("dev"));
