@@ -1,4 +1,12 @@
 const RESPONSE_MESSAGE = {
+	USER_NOT_AUTHORIZED: "User not authorized",
+	USER_ALREADY_AUTHORIZED: "User already authorized",
+	USER_NOT_FOUND: "User not found",
+	USER_ALREADY_EXISTS: "User already exists",
+	INVALID_ARGUMENT: "Invalid argument",
+	NICKNAME_ALREADY_EXISTS: "Nickname already exists",
+	SESSION_DESTROY_FAILED: "Failed to destroy session",
+
 	LOCATION_NOT_FOUND: "Location not found",
 	REVIEW_NOT_FOUND: "Review not found",
 	FORBIDDEN_MESSAGE: "You do not have permission.",
