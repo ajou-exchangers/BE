@@ -11,6 +11,7 @@ router.get("/locations", checkAdminAuthenticated, adminController.getNotAccepted
 router.get("/locations/:id", checkAdminAuthenticated, adminController.getNotAcceptedLocation);
 router.post("/login", checkNotAuthenticated, adminController.adminLogin)
 router.get("/locations-update", checkAdminAuthenticated, adminController.getUpdateLocations);
+router.get("/locations-update/:id",checkAdminAuthenticated, adminController.getUpdateLocation);
 router.put("/locations-update/:id",checkAdminAuthenticated, adminController.updateLocation);
 router.delete("/locations-update/:id",checkAdminAuthenticated, adminController.rejectLocationUpdate);
 

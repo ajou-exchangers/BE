@@ -91,3 +91,12 @@ exports.rejectLocationUpdate = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.getUpdateLocation = async (req, res, next) => {
+    try {
+        const updateLocation = await adminService.getUpdateLocation(req.params.id);
+        res.json(updateLocation);
+    } catch (error) {
+        next(error);
+    }
+};

@@ -125,3 +125,13 @@ exports.rejectLocationUpdate = async (locationUpdateId) => {
     }
     await LocationUpdate.deleteOne(locationUpdate);
 }
+
+exports.getUpdateLocation = async (locationUpdateId) => {
+    const updateLocation = await LocationUpdate
+        .findOne({_id:locationUpdateId}).populate({
+            path: 'user',
+            select: 'email nickname',
+        }).populate('location');
+
+    return updateLocation;
+}
