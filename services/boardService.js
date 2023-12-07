@@ -1,3 +1,4 @@
+const RESPONSE_MESSAGE = require("../constants/errorMessage");
 const Post = require("../models/Post");
 const CustomError = require("../utils/CustomError");
 
@@ -18,7 +19,11 @@ exports.findPost = async (req, postId) => {
 			populate: { path: "author", select: "nickname" },
 			select: "content createdAt likes",
 		});
-	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+	if (!post)
+		throw CustomError(
+			ERROR_CODES.NOT_FOUND,
+			RESPONSE_MESSAGE.POST_NOT_FOUND
+		);
 
 	return {
 		...post._doc,
@@ -44,27 +49,46 @@ exports.createPost = async (req, title, content, imageUrl) => {
 
 exports.updatePost = async (req, postId, title, content) => {
 	const post = await Post.findById(postId);
-	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+	if (!post)
+		throw CustomError(
+			ERROR_CODES.NOT_FOUND,
+			RESPONSE_MESSAGE.POST_NOT_FOUND
+		);
 	if (post.author != req.session.userId)
-		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not the author");
+		throw CustomError(
+			ERROR_CODES.BAD_REQUEST,
+			RESPONSE_MESSAGE.NOT_THE_AUTHOR
+		);
 
 	post.title = title;
 	post.content = content;
+	post.updatedAt = Date.now();
 	await post.save();
 };
 
 exports.deletePost = async (req, postId) => {
 	const post = await Post.findById(postId);
-	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+	if (!post)
+		throw CustomError(
+			ERROR_CODES.NOT_FOUND,
+			RESPONSE_MESSAGE.POST_NOT_FOUND
+		);
 	if (post.author != req.session.userId)
-		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
+		throw CustomError(
+			ERROR_CODES.BAD_REQUEST,
+			RESPONSE_MESSAGE.NOT_THE_AUTHOR
+		);
 
 	await post.deleteOne();
 };
 
 exports.likePost = async (req, postId) => {
 	const post = await Post.findById(postId);
-	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
+	if (!post)
+		throw CustomError(
+			ERROR_CODES.NOT_FOUND,
+			RESPONSE_MESSAGE.POST_NOT_FOUND
+		);
 
 	const liked = post.likes.includes(req.session.userId);
 	if (liked) post.likes.pull(req.session.userId);
