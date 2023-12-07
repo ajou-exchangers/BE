@@ -1,6 +1,8 @@
 const Location = require("../models/Location");
 const LoginResponse = require("../dto/response/LoginResponse");
 const adminService = require("../services/adminService");
+const Response = require("../dto/response/Response");
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.deleteLocation = async (req, res, next) => {
     try {
@@ -19,15 +21,8 @@ exports.deleteLocation = async (req, res, next) => {
 
 exports.acceptAddLocation = async (req, res, next) => {
     try {
-        const acceptLocation = await Location.findById(req.params.id);
-        if (!acceptLocation) {
-            const error = new Error("not found apply location");
-            error.status = 404;
-            return next(error)
-        }
-        acceptLocation.isVisible = true;
-        await acceptLocation.save();
-        res.json(acceptLocation);
+        await adminService.acceptAddLocation(req.params.id);
+        res.status(201).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
     } catch (error) {
         next(error);
     }
