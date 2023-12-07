@@ -20,4 +20,4 @@ const RESPONSE_MESSAGE = {
 	COMMENT_NOT_IN_THE_POST: "Comment not in the post",
 };
 
-module.exports = RESPONSE_MESSAGE;
+module.exports = ERROR_MESSAGE;
