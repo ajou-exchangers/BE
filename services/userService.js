@@ -23,25 +23,14 @@ exports.findUserById = async (id) => {
 
 exports.findUserByNickname = async (nickname) => {
 	if (!nickname)
-		throw CustomError(ERROR_CODES.BAD_REQUEST, "Nickname is required");
-	return await User.findOne({ nickname });
-};
-
-exports.createUser = async (email, password, nickname, imageUrl) => {
-	if (!email || !password || !nickname)
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
 			RESPONSE_MESSAGE.INVALID_ARGUMENT
 		);
+	return await User.findOne({ nickname });
+};
 
-	dupEmailUser = await User.findOne({ email });
-	dupNicknameUser = await User.findOne({ nickname });
-	if (dupEmailUser || dupNicknameUser)
-		throw CustomError(
-			ERROR_CODES.BAD_REQUEST,
-			RESPONSE_MESSAGE.USER_ALREADY_EXISTS
-		);
-
+exports.createUser = async (email, password, nickname, imageUrl) => {
 	const hashedPasswd = await bcrypt.hash(password, 10);
 	const user = new User({
 		email,
