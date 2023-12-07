@@ -2,16 +2,17 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
+const RESPONSE_MESSAGE = require("../constants/errorMessage");
 
 exports.findUser = async (email, password) => {
 	if (!email || !password)
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			"Email and password are required"
+			RESPONSE_MESSAGE.INVALID_ARGUMENT
 		);
 	const user = await User.findOne({ email });
-	if (!user) return null;
-	else if (await bcrypt.compare(password, user.password)) return user;
+	if (user != null && (await bcrypt.compare(password, user.password)))
+		return user;
 	else return null;
 };
 
@@ -30,12 +31,17 @@ exports.createUser = async (email, password, nickname, imageUrl) => {
 	if (!email || !password || !nickname)
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			"Email, password, nickname are required"
+			RESPONSE_MESSAGE.INVALID_ARGUMENT
 		);
+
 	dupEmailUser = await User.findOne({ email });
 	dupNicknameUser = await User.findOne({ nickname });
 	if (dupEmailUser || dupNicknameUser)
-		throw CustomError(ERROR_CODES.BAD_REQUEST, "User already exists");
+		throw CustomError(
+			ERROR_CODES.BAD_REQUEST,
+			RESPONSE_MESSAGE.USER_ALREADY_EXISTS
+		);
+
 	const hashedPasswd = await bcrypt.hash(password, 10);
 	const user = new User({
 		email,
