@@ -33,3 +33,12 @@ exports.getNotAcceptedLocations = async (page) => {
 
     return notAcceptedLocations;
 };
+
+exports.getNotAcceptedLocation = async (locationId) => {
+    const notAcceptedLocation = await Location.findOne({isVisible: false, _id: locationId});
+    if(!notAcceptedLocation){
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
+        return;
+    }
+    return notAcceptedLocation;
+};

@@ -48,11 +48,22 @@ exports.rejectAddLocation = async (req, res, next) => {
     }
 }
 
+
 exports.getNotAcceptedLocations = async (req, res, next) => {
     try {
         const page = req.query.page || 1;
         const notAcceptedLocations = await adminService.getNotAcceptedLocations(page);
         res.json(notAcceptedLocations);
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.getNotAcceptedLocation = async (req, res, next) => {
+    try {
+        const locationId = req.params.id;
+        const notAcceptedLocation = await adminService.getNotAcceptedLocation(locationId);
+        res.json(notAcceptedLocation);
     } catch (err) {
         next(err);
     }
