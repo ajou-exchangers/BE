@@ -61,3 +61,12 @@ exports.rejectAddLocation = async (locationId) => {
     }
     await Location.deleteOne(rejectedLocation);
 }
+
+exports.deleteLocation = async (locationId) => {
+    const deletedLocation = await Location.findOne({isVisible: true, _id: locationId});
+    if (!deletedLocation) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
+        return;
+    }
+    await Location.deleteOne(deletedLocation);
+}

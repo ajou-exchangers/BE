@@ -6,14 +6,8 @@ const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.deleteLocation = async (req, res, next) => {
     try {
-        const deletedLocation = await Location.findById(req.params.id);
-        if (!deletedLocation) {
-            const error = new Error("not found location");
-            error.status = 404;
-            return next(error)
-        }
-        await Location.deleteOne(deletedLocation);
-        res.json({result: "delete location"});
+        await adminService.deleteLocation(req.params.id);
+        res.status(200).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
     } catch (error) {
         next(error);
     }
@@ -22,7 +16,7 @@ exports.deleteLocation = async (req, res, next) => {
 exports.acceptAddLocation = async (req, res, next) => {
     try {
         await adminService.acceptAddLocation(req.params.id);
-        res.status(200).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
+        res.status(200).json(new Response(RESPONSE_MESSAGE.DELETE_LOCATION));
     } catch (error) {
         next(error);
     }

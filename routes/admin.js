@@ -4,7 +4,7 @@ const adminController = require("../controllers/adminController");
 const {checkAdminAuthenticated} = require("../middlewares/adminMiddleware");
 const {checkNotAuthenticated} = require("../middlewares/authMiddleware");
 
-router.delete("/locations/:id", adminController.deleteLocation);
+router.delete("/locations/:id",checkAdminAuthenticated, adminController.deleteLocation);
 router.put("/locations-add/:id",checkAdminAuthenticated, adminController.acceptAddLocation);
 router.delete("/locations-add/:id",checkAdminAuthenticated, adminController.rejectAddLocation);
 router.get("/locations", checkAdminAuthenticated, adminController.getNotAcceptedLocations);
