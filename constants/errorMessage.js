@@ -1,4 +1,4 @@
-const RESPONSE_MESSAGE = {
+const ERROR_MESSAGE = {
 	USER_NOT_AUTHORIZED: "User not authorized",
 	USER_ALREADY_AUTHORIZED: "User already authorized",
 	USER_NOT_FOUND: "User not found",
