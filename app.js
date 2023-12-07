@@ -30,10 +30,10 @@ app.use(
 		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
-		proxy:true,
+		proxy: true,
 		cookie: {
-			httpOnly : true,
-			secure: true, // http도 허용
+			httpOnly: true,
+			secure: true,
 			sameSite: "none",
 			maxAge: 1000 * 60 * 60 * 24 * 3, // 3일
 		},
