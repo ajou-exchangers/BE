@@ -22,7 +22,7 @@ exports.deleteLocation = async (req, res, next) => {
 exports.acceptAddLocation = async (req, res, next) => {
     try {
         await adminService.acceptAddLocation(req.params.id);
-        res.status(201).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
+        res.status(200).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
     } catch (error) {
         next(error);
     }
@@ -30,14 +30,8 @@ exports.acceptAddLocation = async (req, res, next) => {
 
 exports.rejectAddLocation = async (req, res, next) => {
     try {
-        const rejectedLocation = await Location.findById(req.params.id);
-        if (!rejectedLocation) {
-            const error = new Error("not found apply location");
-            error.status = 404;
-            next(error)
-        }
-        await Location.deleteOne(rejectedLocation);
-        res.json({result: "reject add location"});
+        await adminService.rejectAddLocation(req.params.id);
+        res.status(200).json(new Response(RESPONSE_MESSAGE.REJECT_LOCATION));
     } catch (error) {
         next(error);
     }

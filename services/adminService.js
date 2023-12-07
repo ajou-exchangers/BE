@@ -52,3 +52,12 @@ exports.acceptAddLocation = async (locationId) => {
     acceptLocation.isVisible = true;
     await acceptLocation.save();
 }
+
+exports.rejectAddLocation = async (locationId) => {
+    const rejectedLocation = await Location.findOne({isVisible: false, _id: locationId});
+    if (!rejectedLocation) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
+        return;
+    }
+    await Location.deleteOne(rejectedLocation);
+}
