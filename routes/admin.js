@@ -12,5 +12,6 @@ router.get("/locations/:id", checkAdminAuthenticated, adminController.getNotAcce
 router.post("/login", checkNotAuthenticated, adminController.adminLogin)
 router.get("/locations-update", checkAdminAuthenticated, adminController.getUpdateLocations);
 router.put("/locations-update/:id",checkAdminAuthenticated, adminController.updateLocation);
+router.delete("/locations-update/:id",checkAdminAuthenticated, adminController.rejectLocationUpdate);
 
 module.exports = router;

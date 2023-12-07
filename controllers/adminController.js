@@ -76,7 +76,17 @@ exports.updateLocation = async (req, res, next) => {
     try{
         const locationUpdateId = req.params.id;
         await adminService.updateLocation(locationUpdateId);
-        res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REVIEW));
+        res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_ACCEPT_LOCATION));
+    }catch (error){
+        next(error);
+    }
+}
+
+exports.rejectLocationUpdate = async (req, res, next) => {
+    try{
+        const locationUpdateId = req.params.id;
+        await adminService.rejectLocationUpdate(locationUpdateId);
+        res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REJECT_LOCATION));
     }catch (error){
         next(error);
     }

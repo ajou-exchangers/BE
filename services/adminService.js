@@ -116,3 +116,12 @@ exports.updateLocation = async (locationUpdateId) => {
 
     await LocationUpdate.deleteOne(locationUpdate);
 }
+
+exports.rejectLocationUpdate = async (locationUpdateId) => {
+    const locationUpdate = await LocationUpdate.findById(locationUpdateId);
+    if (!locationUpdate) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_UPDATE_NOT_FOUND);
+        return;
+    }
+    await LocationUpdate.deleteOne(locationUpdate);
+}

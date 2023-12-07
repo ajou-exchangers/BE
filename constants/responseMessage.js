@@ -9,6 +9,7 @@ const RESPONSE_MESSAGE = {
     REJECT_LOCATION: "Location reject request has been successfully completed.",
     DELETE_LOCATION: "Location delete request has been successfully completed.",
     UPDATE_ACCEPT_LOCATION: "Location update accept request has been successfully completed.",
+    UPDATE_REJECT_LOCATION: "Location update reject request has been successfully completed.",
 };
 
 module.exports = RESPONSE_MESSAGE;
