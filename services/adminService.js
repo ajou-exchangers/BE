@@ -78,10 +78,41 @@ exports.getUpdateLocations = async (page) => {
     const updateLocations = await LocationUpdate
         .find().populate({
             path: 'user',
-            select: 'email nickname', // Specify the fields you want to populate
+            select: 'email nickname',
         }).populate('location').sort({createdAt: -1})
         .skip(skipItems)
         .limit(10);
 
     return updateLocations;
+}
+
+exports.updateLocation = async (locationUpdateId) => {
+    const locationUpdate = await LocationUpdate.findById(locationUpdateId);
+    if (!locationUpdate) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_UPDATE_NOT_FOUND);
+        return;
+    }
+    const location = await Location.findById(locationUpdate.location);
+    if (!location) {
+        throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
+        return;
+    }
+    location.koName = locationUpdate.koName;
+    location.enName = locationUpdate.enName;
+    location.koAddress = locationUpdate.koAddress;
+    location.enAddress = locationUpdate.enAddress;
+    location.kioskAvailable = locationUpdate.kioskAvailable;
+    location.parkingAvailable = locationUpdate.parkingAvailable;
+    location.englishSpeaking = locationUpdate.englishSpeaking;
+    location.wifiAvailable = locationUpdate.wifiAvailable;
+    location.description = locationUpdate.description;
+    location.category = locationUpdate.category;
+    location.image = locationUpdate.image;
+    location.latitude = locationUpdate.latitude;
+    location.longitude = locationUpdate.longitude;
+    location.user = locationUpdate.user;
+    location.createdAt = locationUpdate.createdAt;
+    await location.save();
+
+    await LocationUpdate.deleteOne(locationUpdate);
 }

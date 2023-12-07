@@ -71,3 +71,13 @@ exports.getUpdateLocations = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.updateLocation = async (req, res, next) => {
+    try{
+        const locationUpdateId = req.params.id;
+        await adminService.updateLocation(locationUpdateId);
+        res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REVIEW));
+    }catch (error){
+        next(error);
+    }
+}
