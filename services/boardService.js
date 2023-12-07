@@ -50,6 +50,7 @@ exports.updatePost = async (req, postId, title, content) => {
 
 	post.title = title;
 	post.content = content;
+	post.updatedAt = Date.now();
 	await post.save();
 };
 

@@ -7,6 +7,7 @@ const postSchema = new Schema({
 	author: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	imageUrl: { type: String },
 	createdAt: { type: Date, default: Date.now },
+	updatedAt: { type: Date, default: Date.now },
 	comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 	likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });

@@ -29,6 +29,7 @@ exports.updateComment = async (req, postId, commentId, content) => {
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Comment not in the post");
 
 	comment.content = content;
+	comment.updatedAt = Date.now();
 	await comment.save();
 };
 
