@@ -1,3 +1,4 @@
+const DOMAINS = require("../constants/domains");
 const ERROR_CODES = require("../constants/errorCodes");
 const RESPONSE_MESSAGE = require("../constants/errorMessage");
 const LoginResponse = require("../dto/response/LoginResponse");
@@ -12,9 +13,13 @@ exports.signupUser = async (email, password, nickname, imageUrl) => {
 			RESPONSE_MESSAGE.INVALID_ARGUMENT
 		);
 
-	dupEmailUser = await User.findOne({ email });
-	dupNicknameUser = await User.findOne({ nickname });
-	if (dupEmailUser || dupNicknameUser)
+	if (!checkDomain(email))
+		throw CustomError(
+			ERROR_CODES.BAD_REQUEST,
+			RESPONSE_MESSAGE.INVALID_ARGUMENT
+		);
+
+	if (await checkDupUser(email, nickname))
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
 			RESPONSE_MESSAGE.USER_ALREADY_EXISTS
@@ -61,4 +66,14 @@ exports.checkNicknameDup = async (nickname) => {
 			RESPONSE_MESSAGE.NICKNAME_ALREADY_EXISTS
 		);
 	}
+};
+
+checkDomain = (email) => {
+	return DOMAINS.some((domain) => email.endsWith(domain));
+};
+
+checkDupUser = async (email, nickname) => {
+	let dupEmailUser = await User.findOne({ email });
+	let dupNicknameUser = await User.findOne({ nickname });
+	return dupEmailUser || dupNicknameUser;
 };
