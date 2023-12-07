@@ -25,6 +25,7 @@ exports.findPost = async (req, postId) => {
 		comments: post.comments.map((comment) => ({
 			...comment._doc,
 			likes: comment.likes.length,
+			liked: comment.likes.includes(req.session.userId),
 		})),
 		likes: post.likes.length,
 		liked: post.likes.includes(req.session.userId),
@@ -46,6 +47,7 @@ exports.updatePost = async (req, postId, title, content) => {
 	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
 	if (post.author != req.session.userId)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not the author");
+
 	post.title = title;
 	post.content = content;
 	await post.save();
@@ -56,6 +58,7 @@ exports.deletePost = async (req, postId) => {
 	if (!post) throw CustomError(ERROR_CODES.NOT_FOUND, "Post not found");
 	if (post.author != req.session.userId)
 		throw CustomError(ERROR_CODES.BAD_REQUEST, "Not authorized");
+
 	await post.deleteOne();
 };
 
