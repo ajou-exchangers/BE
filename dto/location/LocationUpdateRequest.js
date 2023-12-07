@@ -13,6 +13,7 @@ class LocationUpdateRequest {
                     latitude,
                     longitude,
                     image,
+                    reason,
                 }) {
         this.koName = koName;
         this.koAddress = koAddress;
@@ -26,6 +27,7 @@ class LocationUpdateRequest {
         this.latitude = latitude;
         this.longitude = longitude;
         this.image = image;
+        this.reason = reason;
     }
 }
 

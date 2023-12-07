@@ -83,6 +83,16 @@ const locationUpdateSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    reason: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value !== '' && value !== null && !onlyWhiteSpaceRegex.test(value);
+            },
+            message: props => 'description must not be empty or null.',
+        },
+    },
 });
 
 const LocationUpdate = mongoose.model('LocationUpdate', locationUpdateSchema);
