@@ -61,3 +61,13 @@ exports.adminLogin = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.getUpdateLocations = async (req, res, next) => {
+    try {
+        const page = req.query.page || 1;
+        const updateLocations = await adminService.getUpdateLocations(page);
+        res.json(updateLocations);
+    } catch (error) {
+        next(error);
+    }
+};

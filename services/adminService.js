@@ -3,6 +3,7 @@ const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 const Location = require("../models/Location");
+const LocationUpdate = require("../models/LocationUpate");
 
 exports.adminLogin = async ({email, password}) => {
     const user = await findUser(email, password);
@@ -36,7 +37,7 @@ exports.getNotAcceptedLocations = async (page) => {
 
 exports.getNotAcceptedLocation = async (locationId) => {
     const notAcceptedLocation = await Location.findOne({isVisible: false, _id: locationId});
-    if(!notAcceptedLocation){
+    if (!notAcceptedLocation) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
         return;
     }
@@ -69,4 +70,18 @@ exports.deleteLocation = async (locationId) => {
         return;
     }
     await Location.deleteOne(deletedLocation);
+}
+
+exports.getUpdateLocations = async (page) => {
+    const skipItems = (page - 1) * 10;
+
+    const updateLocations = await LocationUpdate
+        .find().populate({
+            path: 'user',
+            select: 'email nickname', // Specify the fields you want to populate
+        }).populate('location').sort({createdAt: -1})
+        .skip(skipItems)
+        .limit(10);
+
+    return updateLocations;
 }
