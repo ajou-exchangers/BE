@@ -1,5 +1,3 @@
-const { divideHangul, normalize} = require("hangul-util");
-
 class LocationUpdateRequest {
     constructor({
                     koName,
@@ -17,7 +15,6 @@ class LocationUpdateRequest {
                 }) {
         this.koName = koName;
         this.koAddress = koAddress;
-        this.enAddress = normalize(this.koAddress,false);
         this.kioskAvailable = kioskAvailable;
         this.parkingAvailable = parkingAvailable;
         this.englishSpeaking = englishSpeaking;
