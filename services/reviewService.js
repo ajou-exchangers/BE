@@ -96,7 +96,8 @@ exports.updateReview = async (
 };
 
 exports.deleteReview = async (reviewId, userId) => {
-    const review = await ReviewController.findOne({_id: reviewId});
+    const review = await Review.findById(reviewId);
+    const location = await Location.findById(review.location);
     if (!review) {
         throw CustomError(
             ERROR_CODES.NOT_FOUND,
@@ -111,5 +112,13 @@ exports.deleteReview = async (reviewId, userId) => {
         );
         return;
     }
+
+    const reviewRating = review.rating;
     await ReviewController.deleteOne(review);
+    if(location) {
+        location.reviewTotalGrade -= reviewRating;
+        location.reviewCount -= 1;
+        location.reviewAverage = location.reviewTotalGrade / location.reviewCount.toFixed(1);
+        await location.save();
+    }
 };
