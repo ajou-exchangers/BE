@@ -1,4 +1,5 @@
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const PostDetailResponse = require("../dto/response/PostDetailResponse");
 const PostListResponse = require("../dto/response/PostListResponse");
 const Post = require("../models/Post");
 const CustomError = require("../utils/CustomError");
