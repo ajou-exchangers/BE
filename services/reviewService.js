@@ -39,23 +39,27 @@ exports.writeReview = async (writeReviewRequest, locationId, userId) => {
 exports.getReviews = async () => {
     const reviews = await Review.find()
         .populate("keywords")
-        .populate("user")
-        .sort({createAt: -1});
+        .populate({
+            path: 'user',
+            select: 'email nickname profile',
+        }).sort({createdAt: -1})
     return reviews;
 };
 
 exports.getReviewsByLocation = async (locationId) => {
     const location = await Location.findById(locationId);
-    if (!location) {
+    if (!location || !location.isVisible) {
         throw CustomError(
             ERROR_CODES.NOT_FOUND,
             ERROR_MESSAGE.LOCATION_NOT_FOUND
         );
-        return;
     }
     const reviews = await Review.find({location: locationId})
         .populate("keywords")
-        .populate("user")
+        .populate({
+            path: 'user',
+            select: 'email nickname profile',
+        })
         .sort({createdAt: -1});
     return reviews;
 };
