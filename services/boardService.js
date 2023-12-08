@@ -3,7 +3,7 @@ const PostListResponse = require("../dto/response/PostListResponse");
 const Post = require("../models/Post");
 const CustomError = require("../utils/CustomError");
 
-exports.findPosts = async () => {
+exports.findAllPosts = async () => {
 	const posts = await Post.find().populate("author", "nickname");
 	return new PostListResponse(posts);
 };

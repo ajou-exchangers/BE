@@ -1,6 +1,6 @@
 const {
 	findPost,
-	findPosts,
+	findAllPosts,
 	createPost,
 	updatePost,
 	deletePost,
@@ -15,7 +15,7 @@ const {
 
 exports.getBoard = async (req, res, next) => {
 	try {
-		const posts = await findPosts();
+		const posts = await findAllPosts();
 		res.status(200).json(posts);
 	} catch (error) {
 		next(error);
