@@ -21,6 +21,7 @@ exports.readLocations = async (searchParam, categoryParam) => {
             {enName: {$regex: searchRegex}},
         ];
     }
+
     const latestLocations = await Location.find(baseQuery).sort({createdAt: -1});
     return latestLocations;
 }
