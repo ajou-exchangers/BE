@@ -7,7 +7,12 @@ exports.checkAuthenticated = async (req, res, next) => {
 	if (req.session.userId && (await findUserById(req.session.userId))) {
 		next();
 	} else {
-		next(CustomError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED));
+		next(
+			CustomError(
+				ERROR_CODES.UNAUTHORIZED,
+				ERROR_MESSAGE.USER_NOT_AUTHORIZED
+			)
+		);
 	}
 };
 
@@ -16,7 +21,7 @@ exports.checkNotAuthenticated = async (req, res, next) => {
 		next(
 			CustomError(
 				ERROR_CODES.BAD_REQUEST,
-				ERROR_MESSAGE.ALREADY_AUTHENTICATED
+				ERROR_MESSAGE.USER_ALREADY_AUTHORIZED
 			)
 		);
 	} else {
