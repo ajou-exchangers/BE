@@ -1,29 +1,24 @@
+const axios = require('axios');
 const Location = require("../models/Location");
+const LocationUpdate = require('../models/LocationUpate');
+const Review = require("../models/Review");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
-const axios = require('axios');
-const Review = require("../models/Review");
+const LocationUtil = require("../utils/LocationUtil");
 const calculateAverageRating = require('../utils/ReviewAverage');
-const LocationReadResponse = require('../dto/location/LocationReadResponse');
-const LocationUpdate = require('../models/LocationUpate');
 
 exports.readLocations = async (searchParam, categoryParam) => {
     const baseQuery = categoryParam ? {category: categoryParam} : {};
-
     if (searchParam) {
-        const searchTermWithoutSpaces = searchParam.replace(/\s/g, '');
-        const searchRegexString = searchTermWithoutSpaces.split('').join('.*');
-        const searchRegex = new RegExp(searchRegexString, 'i');
-        // console.log(searchRegex);
+        const searchRegex = LocationUtil.buildSearchRegex(searchParam);
         baseQuery.$or = [
             {koName: {$regex: searchRegex}},
             {enName: {$regex: searchRegex}},
         ];
     }
-
-    const latestLocations = await Location.find(baseQuery).sort({createdAt: -1});
-    return latestLocations;
+    const locations = await Location.find(baseQuery).sort({createdAt: -1});
+    return locations;
 }
 
 exports.readLocation = async (locationId) => {

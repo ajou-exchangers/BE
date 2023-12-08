@@ -1,15 +1,13 @@
-
-const LocationApplyRequest = require("../dto/LocationApplyRequest")
-const LocationUpdateRequest = require("../dto/location/LocationUpdateRequest")
 const LocationService = require("../services/locationService");
 const Response = require("../dto/response/Response");
+const LocationApplyRequest = require("../dto/location/LocationApplyRequest");
+const LocationUpdateRequest = require("../dto/location/LocationUpdateRequest");
 const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.readLocations = async (req, res, next) => {
 	try {
 		const searchParam = req.query.search;
 		const categoryParam = req.query.category;
-
 		const locations = await LocationService.readLocations(
 			searchParam,
 			categoryParam
