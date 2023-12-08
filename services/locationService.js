@@ -6,7 +6,7 @@ const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 const LocationUtil = require("../utils/LocationUtil");
-const calculateAverageRating = require('../utils/ReviewAverage');
+const LocationResponse = require('../dto/location/LocationResponse');
 
 exports.readLocations = async (searchParam, categoryParam) => {
     const baseQuery = categoryParam ? {category: categoryParam} : {};
@@ -25,12 +25,14 @@ exports.readLocation = async (locationId) => {
     const location = await Location.findById(locationId);
     if (!location) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
-        return;
     }
-    const reviews = await Review.find({location: locationId}).populate('keywords').populate('user').sort({createdAt: -1});
-    const reviewAverage = calculateAverageRating(reviews);
-    const reviewCount = reviews.length;
-    const locationResponse = new LocationReadResponse({location, reviews, reviewAverage, reviewCount});
+    const reviews = await Review.find({location: locationId})
+        .populate('keywords')
+        .populate({
+            path: 'user',
+            select: 'email nickname profile',
+        }).sort({createdAt: -1});
+    const locationResponse = new LocationResponse({location, reviews});
     return locationResponse;
 }
 
