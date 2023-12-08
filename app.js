@@ -42,20 +42,22 @@ app.use(
 
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
-const locationRouter = require("./routes/location");
-const boardRouter = require("./routes/board");
+const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
+const locationRouter = require("./routes/location");
 const keywordRouter = require("./routes/keyword");
 const reviewRouter = require("./routes/review");
+const boardRouter = require("./routes/board");
 const s3Router = require("./routes/s3");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);
-app.use("/api/exchangers/v1/locations", locationRouter);
-app.use("/api/exchangers/v1/board", boardRouter);
+app.use("/api/exchangers/v1/user", userRouter);
 app.use("/api/exchangers/v1/admin", adminRouter);
+app.use("/api/exchangers/v1/locations", locationRouter);
 app.use("/api/exchangers/v1/keywords", keywordRouter);
 app.use("/api/exchangers/v1/reviews", reviewRouter);
+app.use("/api/exchangers/v1/board", boardRouter);
 app.use("/api/exchangers/v1/s3", s3Router);
 
 app.use(errorHandler);

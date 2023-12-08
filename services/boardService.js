@@ -1,14 +1,12 @@
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const PostDetailResponse = require("../dto/response/PostDetailResponse");
+const PostListResponse = require("../dto/response/PostListResponse");
 const Post = require("../models/Post");
 const CustomError = require("../utils/CustomError");
 
-exports.findPosts = async () => {
+exports.findAllPosts = async () => {
 	const posts = await Post.find().populate("author", "nickname");
-	return posts.map((post) => ({
-		...post._doc,
-		comments: post.comments.length,
-		likes: post.likes.length,
-	}));
+	return new PostListResponse(posts);
 };
 
 exports.findPost = async (req, postId) => {
@@ -22,16 +20,7 @@ exports.findPost = async (req, postId) => {
 	if (!post)
 		throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.POST_NOT_FOUND);
 
-	return {
-		...post._doc,
-		comments: post.comments.map((comment) => ({
-			...comment._doc,
-			likes: comment.likes.length,
-			liked: comment.likes.includes(req.session.userId),
-		})),
-		likes: post.likes.length,
-		liked: post.likes.includes(req.session.userId),
-	};
+	return new PostDetailResponse(post, req.session.userId);
 };
 
 exports.createPost = async (req, title, content, imageUrl) => {

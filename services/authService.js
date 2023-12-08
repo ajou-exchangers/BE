@@ -1,7 +1,7 @@
 const DOMAINS = require("../constants/domains");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
-const LoginResponse = require("../dto/response/LoginResponse");
+const UserInfoResponse = require("../dto/response/UserInfoResponse");
 const User = require("../models/User");
 const CustomError = require("../utils/CustomError");
 const { createUser, findUser, findUserByNickname } = require("./userService");
@@ -32,7 +32,7 @@ exports.loginUser = async (req, email, password) => {
 	const user = await findUser(email, password);
 	if (user) {
 		req.session.userId = user._id;
-		return new LoginResponse(user);
+		return new UserInfoResponse(user);
 	} else {
 		throw CustomError(
 			ERROR_CODES.UNAUTHORIZED,
