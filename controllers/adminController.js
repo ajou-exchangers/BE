@@ -1,13 +1,12 @@
-const Location = require("../models/Location");
-const UserInfoResponse = require("../dto/response/UserInfoResponse");
-const adminService = require("../services/adminService");
+const AdminService = require("../services/adminService");
 const Response = require("../dto/response/Response");
+const UserInfoResponse = require("../dto/response/UserInfoResponse");
 const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.deleteLocation = async (req, res, next) => {
 	try {
-		await adminService.deleteLocation(req.params.id);
-		res.status(200).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
+		await AdminService.deleteLocation(req.params.id);
+		res.status(200).json(new Response(RESPONSE_MESSAGE.DELETE_LOCATION));
 	} catch (error) {
 		next(error);
 	}
@@ -15,8 +14,8 @@ exports.deleteLocation = async (req, res, next) => {
 
 exports.acceptAddLocation = async (req, res, next) => {
 	try {
-		await adminService.acceptAddLocation(req.params.id);
-		res.status(200).json(new Response(RESPONSE_MESSAGE.DELETE_LOCATION));
+		await AdminService.acceptAddLocation(req.params.id);
+		res.status(200).json(new Response(RESPONSE_MESSAGE.ACCEPT_LOCATION));
 	} catch (error) {
 		next(error);
 	}
@@ -24,7 +23,7 @@ exports.acceptAddLocation = async (req, res, next) => {
 
 exports.rejectAddLocation = async (req, res, next) => {
 	try {
-		await adminService.rejectAddLocation(req.params.id);
+		await AdminService.rejectAddLocation(req.params.id);
 		res.status(200).json(new Response(RESPONSE_MESSAGE.REJECT_LOCATION));
 	} catch (error) {
 		next(error);
@@ -34,9 +33,7 @@ exports.rejectAddLocation = async (req, res, next) => {
 exports.getNotAcceptedLocations = async (req, res, next) => {
 	try {
 		const page = req.query.page || 1;
-		const notAcceptedLocations = await adminService.getNotAcceptedLocations(
-			page
-		);
+		const notAcceptedLocations = await AdminService.getNotAcceptedLocations(page);
 		res.json(notAcceptedLocations);
 	} catch (err) {
 		next(err);
@@ -46,7 +43,7 @@ exports.getNotAcceptedLocations = async (req, res, next) => {
 exports.getNotAcceptedLocation = async (req, res, next) => {
 	try {
 		const locationId = req.params.id;
-		const notAcceptedLocation = await adminService.getNotAcceptedLocation(
+		const notAcceptedLocation = await AdminService.getNotAcceptedLocation(
 			locationId
 		);
 		res.json(notAcceptedLocation);
@@ -57,7 +54,7 @@ exports.getNotAcceptedLocation = async (req, res, next) => {
 
 exports.adminLogin = async (req, res, next) => {
 	try {
-		const user = await adminService.adminLogin({ ...req.body });
+		const user = await AdminService.adminLogin({ ...req.body });
 		req.session.userId = user._id;
 		res.status(200).json(new UserInfoResponse(user));
 	} catch (error) {
@@ -68,7 +65,7 @@ exports.adminLogin = async (req, res, next) => {
 exports.getUpdateLocations = async (req, res, next) => {
 	try {
 		const page = req.query.page || 1;
-		const updateLocations = await adminService.getUpdateLocations(page);
+		const updateLocations = await AdminService.getUpdateLocations(page);
 		res.json(updateLocations);
 	} catch (error) {
 		next(error);
@@ -78,7 +75,7 @@ exports.getUpdateLocations = async (req, res, next) => {
 exports.updateLocation = async (req, res, next) => {
 	try {
 		const locationUpdateId = req.params.id;
-		await adminService.updateLocation(locationUpdateId);
+		await AdminService.updateLocation(locationUpdateId);
 		res.status(200).json(
 			new Response(RESPONSE_MESSAGE.UPDATE_ACCEPT_LOCATION)
 		);
@@ -90,7 +87,7 @@ exports.updateLocation = async (req, res, next) => {
 exports.rejectLocationUpdate = async (req, res, next) => {
 	try {
 		const locationUpdateId = req.params.id;
-		await adminService.rejectLocationUpdate(locationUpdateId);
+		await AdminService.rejectLocationUpdate(locationUpdateId);
 		res.status(200).json(
 			new Response(RESPONSE_MESSAGE.UPDATE_REJECT_LOCATION)
 		);
@@ -101,7 +98,7 @@ exports.rejectLocationUpdate = async (req, res, next) => {
 
 exports.getUpdateLocation = async (req, res, next) => {
 	try {
-		const updateLocation = await adminService.getUpdateLocation(
+		const updateLocation = await AdminService.getUpdateLocation(
 			req.params.id
 		);
 		res.json(updateLocation);
