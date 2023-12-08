@@ -41,18 +41,33 @@ exports.readLocation = async (locationId) => {
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
     try {
         const apiUrl = 'https://openapi.naver.com/v1/papago/n2mt';
-        const response = await axios.post(apiUrl,{
-            text:applyLocationRequest.koName,
-            source:"ko",
-            target:"en",
-        },{
+        const enNameResponse = await axios.post(apiUrl, {
+            text: applyLocationRequest.koName,
+            source: "ko",
+            target: "en",
+        }, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
                 'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
             },
         })
-        const location = await Location.create({...applyLocationRequest, user: userId, image, enName:response.data.message.result.translatedText});
+        const enName = enNameResponse.data.message.result.translatedText;
+
+        const enAddressResponse = await axios.post(apiUrl, {
+            text: applyLocationRequest.koAddress,
+            source: "ko",
+            target: "en",
+        }, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
+                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
+            },
+        })
+        const enAddress = enAddressResponse.data.message.result.translatedText;
+
+        const location = await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
         await location.save();
     } catch (e) {
         if (e.name === "ValidationError") {
@@ -71,18 +86,38 @@ exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     }
     try {
         const apiUrl = 'https://openapi.naver.com/v1/papago/n2mt';
-        const response = await axios.post(apiUrl,{
-            text:locationUpdateRequest.koName,
-            source:"ko",
-            target:"en",
-        },{
+        const enNameResponse = await axios.post(apiUrl, {
+            text: locationUpdateRequest.koName,
+            source: "ko",
+            target: "en",
+        }, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
                 'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
             },
         })
-        const locationUpdate = await LocationUpdate.create({...locationUpdateRequest, user: userId, enName:response.data.message.result.translatedText, location:location._id});
+        const enName = enNameResponse.data.message.result.translatedText;
+
+        const enAddressResponse = await axios.post(apiUrl, {
+            text: locationUpdateRequest.koAddress,
+            source: "ko",
+            target: "en",
+        }, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
+                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
+            },
+        })
+        const enAddress = enAddressResponse.data.message.result.translatedText;
+        const locationUpdate = await LocationUpdate.create({
+            ...locationUpdateRequest,
+            user: userId,
+            enName,
+            enAddress,
+            location: location._id
+        });
         await locationUpdate.save();
     } catch (e) {
         if (e.name === "ValidationError") {

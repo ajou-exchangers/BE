@@ -18,6 +18,8 @@ const ERROR_MESSAGE = {
 	COMMENT_NOT_FOUND: "Comment not found",
 	NOT_THE_AUTHOR: "Not the author",
 	COMMENT_NOT_IN_THE_POST: "Comment not in the post",
+
+	LOCATION_UPDATE_NOT_FOUND: "Location Update not found",
 };
 
 module.exports = ERROR_MESSAGE;
