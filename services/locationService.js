@@ -32,39 +32,13 @@ exports.readLocation = async (locationId) => {
             path: 'user',
             select: 'email nickname profile',
         }).sort({createdAt: -1});
-    const locationResponse = new LocationResponse({location, reviews});
-    return locationResponse;
+    return new LocationResponse({location, reviews});;
 }
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
     try {
-        const apiUrl = 'https://openapi.naver.com/v1/papago/n2mt';
-        const enNameResponse = await axios.post(apiUrl, {
-            text: applyLocationRequest.koName,
-            source: "ko",
-            target: "en",
-        }, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
-                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
-            },
-        })
-        const enName = enNameResponse.data.message.result.translatedText;
-
-        const enAddressResponse = await axios.post(apiUrl, {
-            text: applyLocationRequest.koAddress,
-            source: "ko",
-            target: "en",
-        }, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Naver-Client-Id': process.env.PAPAGO_CLIENT_ID,
-                'X-Naver-Client-Secret': process.env.PAPAGO_SECRET,
-            },
-        })
-        const enAddress = enAddressResponse.data.message.result.translatedText;
-
+        const enName = await LocationUtil.translateText(applyLocationRequest.koName, 'ko', 'en');
+        const enAddress = await LocationUtil.translateText(applyLocationRequest.koAddress, 'ko', 'en');
         const location = await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
         await location.save();
     } catch (e) {

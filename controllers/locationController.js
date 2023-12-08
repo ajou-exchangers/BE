@@ -29,7 +29,7 @@ exports.readLocation = async (req, res, next) => {
 
 exports.applyLocation = async (req, res, next) => {
     try {
-        const imageUrl = req.file ? req.file.location : null;
+        const imageUrl = req.file?.location;
         const locationApplyRequest = new LocationApplyRequest(req.body);
         await LocationService.applyLocation(locationApplyRequest, req.session.userId, imageUrl);
         res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
