@@ -3,7 +3,7 @@ const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 const Location = require("../models/Location");
-const LocationUpdate = require("../models/LocationUpate");
+const LocationUpdate = require("../models/UpdateLocation");
 
 exports.adminLogin = async ({email, password}) => {
     const user = await findUser(email, password);
