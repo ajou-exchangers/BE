@@ -64,12 +64,7 @@ exports.getReviewsByLocation = async (locationId) => {
     return reviews;
 };
 
-exports.updateReview = async (
-    updateReviewRequest,
-    reviewId,
-    images,
-    userId
-) => {
+exports.updateReview = async (updateReviewRequest, reviewId, userId) => {
     try {
         const review = await Review.findById(reviewId);
         if (!review) {
@@ -87,25 +82,23 @@ exports.updateReview = async (
         }
         const location = await Location.findById(review.location);
         const reviewRating = review.rating;
-        review.rating = updateReviewRequest.rating;
-        review.keywords = updateReviewRequest.keywords;
-        review.review = updateReviewRequest.review;
-        review.images = images;
+        Object.assign(review, {...updateReviewRequest});
         await review.save();
 
         if (location) {
             location.reviewTotalGrade -= reviewRating;
             location.reviewTotalGrade += review.rating;
-            location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+            if (location.reviewCount !== 0) {
+                location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+            }
             await location.save();
         }
 
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
-        } else {
-            throw CustomError(e.status, e.message);
         }
+        throw CustomError(e.status, e.message);
     }
 };
 
