@@ -1,14 +1,11 @@
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const PostListResponse = require("../dto/response/PostListResponse");
 const Post = require("../models/Post");
 const CustomError = require("../utils/CustomError");
 
 exports.findPosts = async () => {
 	const posts = await Post.find().populate("author", "nickname");
-	return posts.map((post) => ({
-		...post._doc,
-		comments: post.comments.length,
-		likes: post.likes.length,
-	}));
+	return new PostListResponse(posts);
 };
 
 exports.findPost = async (req, postId) => {
