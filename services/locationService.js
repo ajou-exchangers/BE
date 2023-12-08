@@ -9,6 +9,11 @@ const LocationReadResponse = require('../dto/location/LocationReadResponse');
 const LocationUpdate = require('../models/LocationUpate');
 
 exports.readLocations = async (searchParam, categoryParam) => {
+    if(!(searchParam||categoryParam)){
+        const locations = await Location.find().sort({createdAt:-1});
+        return locations;
+    }
+
     const baseQuery = categoryParam ? {category: categoryParam} : {};
 
     if (searchParam) {
@@ -21,6 +26,7 @@ exports.readLocations = async (searchParam, categoryParam) => {
             {enName: {$regex: searchRegex}},
         ];
     }
+
     const latestLocations = await Location.find(baseQuery).sort({createdAt: -1});
     return latestLocations;
 }

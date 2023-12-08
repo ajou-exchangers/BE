@@ -61,6 +61,18 @@ const locationSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    reviewTotalGrade:{
+        type: Number,
+        default: 0,
+    },
+    reviewAverage:{
+        type: Number,
+        default: 0,
+    },
+    reviewCount:{
+        type: Number,
+        default: 0,
+    }
 });
 
 const Location = mongoose.model('Location', locationSchema);
