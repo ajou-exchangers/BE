@@ -19,6 +19,7 @@ exports.writeReview = async (req, res, next) => {
 exports.updateReview = async (req, res, next) => {
     try {
         const images = req.files?.map((file) => file.location).length > 0 ? req.files?.map((file) => file.location) : req.body.images;
+        console.log(images);
         const updateReviewRequest = new UpdateReviewRequest(req.body);
         await ReviewService.updateReview(updateReviewRequest, req.params.id, images, req.session.userId)
         res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_REVIEW));
