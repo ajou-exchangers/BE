@@ -3,7 +3,6 @@ const Review = require("../models/Review");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
-const ReviewController = require("../models/Review");
 
 exports.writeReview = async (writeReviewRequest, locationId, userId) => {
     try {
@@ -78,7 +77,6 @@ exports.updateReview = async (updateReviewRequest, reviewId, userId) => {
                 ERROR_CODES.FORBIDDEN,
                 ERROR_MESSAGE.FORBIDDEN_MESSAGE
             );
-            return;
         }
         const location = await Location.findById(review.location);
         const reviewRating = review.rating;
@@ -109,22 +107,24 @@ exports.deleteReview = async (reviewId, userId) => {
             ERROR_CODES.NOT_FOUND,
             ERROR_MESSAGE.REVIEW_NOT_FOUND
         );
-        return;
     }
     if (review.user.toString() !== userId) {
         throw CustomError(
             ERROR_CODES.FORBIDDEN,
             ERROR_MESSAGE.FORBIDDEN_MESSAGE
         );
-        return;
     }
     const location = await Location.findById(review.location);
     const reviewRating = review.rating;
-    await ReviewController.deleteOne(review);
+    await Review.deleteOne(review);
     if (location) {
         location.reviewTotalGrade -= reviewRating;
         location.reviewCount -= 1;
-        location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+        if (location.reviewCount !== 0) {
+            location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+        }else{
+            location.reviewAverage = 0;
+        }
         await location.save();
     }
 };
