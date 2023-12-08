@@ -1,7 +1,7 @@
 const DOMAINS = require("../constants/domains");
 const ERROR_CODES = require("../constants/errorCodes");
-const RESPONSE_MESSAGE = require("../constants/errorMessage");
-const LoginResponse = require("../dto/response/LoginResponse");
+const ERROR_MESSAGE = require("../constants/errorMessage");
+const UserInfoResponse = require("../dto/response/UserInfoResponse");
 const User = require("../models/User");
 const CustomError = require("../utils/CustomError");
 const { createUser, findUser, findUserByNickname } = require("./userService");
@@ -10,19 +10,19 @@ exports.signupUser = async (email, password, nickname, imageUrl) => {
 	if (!email || !password || !nickname)
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			RESPONSE_MESSAGE.INVALID_ARGUMENT
+			ERROR_MESSAGE.INVALID_ARGUMENT
 		);
 
 	if (!checkDomain(email))
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			RESPONSE_MESSAGE.INVALID_ARGUMENT
+			ERROR_MESSAGE.INVALID_ARGUMENT
 		);
 
 	if (await checkDupUser(email, nickname))
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			RESPONSE_MESSAGE.USER_ALREADY_EXISTS
+			ERROR_MESSAGE.USER_ALREADY_EXISTS
 		);
 
 	await createUser(email, password, nickname, imageUrl);
@@ -32,11 +32,11 @@ exports.loginUser = async (req, email, password) => {
 	const user = await findUser(email, password);
 	if (user) {
 		req.session.userId = user._id;
-		return new LoginResponse(user);
+		return new UserInfoResponse(user);
 	} else {
 		throw CustomError(
 			ERROR_CODES.UNAUTHORIZED,
-			RESPONSE_MESSAGE.INVALID_ARGUMENT
+			ERROR_MESSAGE.INVALID_ARGUMENT
 		);
 	}
 };
@@ -48,7 +48,7 @@ exports.logoutUser = async (req) => {
 				reject(
 					CustomError(
 						ERROR_CODES.INTERNAL_SERVER,
-						RESPONSE_MESSAGE.SESSION_DESTROY_FAILED
+						ERROR_MESSAGE.SESSION_DESTROY_FAILED
 					)
 				);
 			} else {
@@ -63,7 +63,7 @@ exports.checkNicknameDup = async (nickname) => {
 	if (user) {
 		throw CustomError(
 			ERROR_CODES.BAD_REQUEST,
-			RESPONSE_MESSAGE.NICKNAME_ALREADY_EXISTS
+			ERROR_MESSAGE.NICKNAME_ALREADY_EXISTS
 		);
 	}
 };

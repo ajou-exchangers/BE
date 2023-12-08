@@ -1,4 +1,4 @@
-class LoginResponse {
+class UserInfoResponse {
 	constructor(user) {
 		this.email = user.email;
 		this.nickname = user.nickname;
@@ -6,4 +6,4 @@ class LoginResponse {
 	}
 }
 
-module.exports = LoginResponse;
+module.exports = UserInfoResponse;

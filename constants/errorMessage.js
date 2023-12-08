@@ -1,4 +1,4 @@
-const RESPONSE_MESSAGE = {
+const ERROR_MESSAGE = {
 	USER_NOT_AUTHORIZED: "User not authorized",
 	USER_ALREADY_AUTHORIZED: "User already authorized",
 	USER_NOT_FOUND: "User not found",
@@ -22,4 +22,4 @@ const RESPONSE_MESSAGE = {
 	LOCATION_UPDATE_NOT_FOUND: "Location Update not found",
 };
 
-module.exports = RESPONSE_MESSAGE;
+module.exports = ERROR_MESSAGE;
