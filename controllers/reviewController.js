@@ -1,15 +1,14 @@
-const ReviewController = require("../models/Review");
+const ReviewService = require("../services/reviewService");
 const WriteReviewRequest = require("../dto/review/WriteReivewRequest");
 const UpdateReviewRequest = require("../dto/review/UpdateReviewRequest");
-const ReviewService = require("../services/reviewService");
-const RESPONSE_MESSAGE = require("../constants/responseMessage");
 const Response = require("../dto/response/Response");
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
 
 exports.writeReview = async (req, res, next) => {
     try {
         const images = req.files.map((file) => file.location);
-        const reviewRequest = new WriteReviewRequest(req.body);
-        await ReviewService.writeReview(reviewRequest, req.params.locationId, req.session.userId, images);
+        const writeReviewRequest = new WriteReviewRequest({...req.body, images});
+        await ReviewService.writeReview(writeReviewRequest, req.params.locationId, req.session.userId);
         res.status(201).json(new Response(RESPONSE_MESSAGE.WRITE_REVIEW));
     } catch (err) {
         next(err);

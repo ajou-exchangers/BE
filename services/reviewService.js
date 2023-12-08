@@ -5,40 +5,34 @@ const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
 const ReviewController = require("../models/Review");
 
-exports.writeReview = async (reviewRequest, locationId, userId, images) => {
+exports.writeReview = async (writeReviewRequest, locationId, userId) => {
     try {
         const location = await Location.findById(locationId);
-        if (!location) {
+        if (!location || !location.isVisible) {
             throw CustomError(
                 ERROR_CODES.NOT_FOUND,
                 ERROR_MESSAGE.LOCATION_NOT_FOUND
             );
-            return;
         }
-        //장소 추가 수락 및 거절 구현하면 추가
-        // if (!location.isVisiable){
-        //     throw CustomError(ERROR_CODES.FORBIDDEN, ERROR_MESSAGE.FORBIDDEN_MESSAGE);
-        // }
 
-        const reviewDoc = await Review.create({
-            location: location.id,
+        const review = await Review.create({
+            location: locationId,
             user: userId,
-            images: images,
-            ...reviewRequest,
+            ...writeReviewRequest,
         });
-        await reviewDoc.save();
+        await review.save();
 
-        location.reviewTotalGrade += reviewDoc.rating;
+        location.reviewTotalGrade += review.rating;
         location.reviewCount += 1;
-        location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+        if (location.reviewCount !== 0) {
+            location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
+        }
         await location.save();
     } catch (e) {
         if (e.name === "ValidationError") {
             throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
-            return;
-        } else {
-            throw CustomError(e.status, e.message);
         }
+        throw CustomError(e.status, e.message);
     }
 };
 
@@ -95,7 +89,7 @@ exports.updateReview = async (
         review.images = images;
         await review.save();
 
-        if(location){
+        if (location) {
             location.reviewTotalGrade -= reviewRating;
             location.reviewTotalGrade += review.rating;
             location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
@@ -130,7 +124,7 @@ exports.deleteReview = async (reviewId, userId) => {
     const location = await Location.findById(review.location);
     const reviewRating = review.rating;
     await ReviewController.deleteOne(review);
-    if(location) {
+    if (location) {
         location.reviewTotalGrade -= reviewRating;
         location.reviewCount -= 1;
         location.reviewAverage = (location.reviewTotalGrade / location.reviewCount).toFixed(1);
