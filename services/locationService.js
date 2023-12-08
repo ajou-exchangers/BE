@@ -1,4 +1,3 @@
-const axios = require('axios');
 const Location = require("../models/Location");
 const UpdateLocation = require('../models/UpdateLocation');
 const Review = require("../models/Review");
@@ -10,6 +9,7 @@ const LocationResponse = require('../dto/location/LocationResponse');
 
 exports.readLocations = async (searchParam, categoryParam) => {
     const baseQuery = categoryParam ? {category: categoryParam} : {};
+    baseQuery.isVisible = true;
     if (searchParam) {
         const searchRegex = LocationUtil.buildSearchRegex(searchParam);
         baseQuery.$or = [
@@ -23,7 +23,7 @@ exports.readLocations = async (searchParam, categoryParam) => {
 
 exports.readLocation = async (locationId) => {
     const location = await Location.findById(locationId);
-    if (!location) {
+    if (!location||!location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
     const reviews = await Review.find({location: locationId})
@@ -32,7 +32,8 @@ exports.readLocation = async (locationId) => {
             path: 'user',
             select: 'email nickname profile',
         }).sort({createdAt: -1});
-    return new LocationResponse({location, reviews});;
+    return new LocationResponse({location, reviews});
+    ;
 }
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
@@ -52,7 +53,7 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
 
 exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     const location = await Location.findById(locationId);
-    if (!location) {
+    if (!location||!location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
     try {
