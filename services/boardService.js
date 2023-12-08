@@ -19,16 +19,7 @@ exports.findPost = async (req, postId) => {
 	if (!post)
 		throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.POST_NOT_FOUND);
 
-	return {
-		...post._doc,
-		comments: post.comments.map((comment) => ({
-			...comment._doc,
-			likes: comment.likes.length,
-			liked: comment.likes.includes(req.session.userId),
-		})),
-		likes: post.likes.length,
-		liked: post.likes.includes(req.session.userId),
-	};
+	return new PostDetailResponse(post, req.session.userId);
 };
 
 exports.createPost = async (req, title, content, imageUrl) => {
