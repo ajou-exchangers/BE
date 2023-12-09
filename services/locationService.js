@@ -36,10 +36,18 @@ exports.readLocation = async (locationId) => {
 }
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
+    const location = await Location.findOne({
+        koName: {$regex: LocationUtil.buildEqualLocationRegex(applyLocationRequest.koName)},
+        latitude: applyLocationRequest.latitude,
+        longitude: applyLocationRequest.longitude,
+        isVisible: true,
+    });
+    if (location) {
+        throw CustomError(ERROR_CODES.CONFLICT, ERROR_MESSAGE.LOCATION_ADD_CONFLICT);
+    }
     const enName = await LocationUtil.translateText(applyLocationRequest.koName, 'ko', 'en');
     const enAddress = await LocationUtil.translateText(applyLocationRequest.koAddress, 'ko', 'en');
-    const location = await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
-    await location.save();
+    await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
 }
 
 exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
@@ -49,12 +57,11 @@ exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     }
     const enName = await LocationUtil.translateText(locationUpdateRequest.koName, 'ko', 'en');
     const enAddress = await LocationUtil.translateText(locationUpdateRequest.koAddress, 'ko', 'en');
-    const locationUpdate = await UpdateLocation.create({
+    await UpdateLocation.create({
         ...locationUpdateRequest,
         user: userId,
         enName,
         enAddress,
         location: location._id
     });
-    await locationUpdate.save();
 }

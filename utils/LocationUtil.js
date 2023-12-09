@@ -28,3 +28,9 @@ exports.translateText = async (text, source, target) => {
         throw CustomError(error.status || 500, error.message || 'Translation failed');
     }
 };
+
+exports.buildEqualLocationRegex = (searchParam) => {
+    const searchTermWithoutSpaces = searchParam.replace(/\s/g, '');
+    const searchRegexString = searchTermWithoutSpaces.split('').map(char => `${char}.*`).join('');
+    return new RegExp(`^${searchRegexString}$`, 'i');
+}

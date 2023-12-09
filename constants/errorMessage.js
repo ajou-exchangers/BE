@@ -22,6 +22,7 @@ const ERROR_MESSAGE = {
 	COMMENT_NOT_IN_THE_POST: "Comment not in the post",
 
 	LOCATION_UPDATE_NOT_FOUND: "Location Update not found",
+	LOCATION_ADD_CONFLICT:"This place already exists.",
 };
 
 module.exports = ERROR_MESSAGE;
