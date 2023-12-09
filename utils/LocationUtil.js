@@ -34,3 +34,12 @@ exports.buildEqualLocationRegex = (searchParam) => {
     const searchRegexString = searchTermWithoutSpaces.split('').map(char => `${char}.*`).join('');
     return new RegExp(`^${searchRegexString}$`, 'i');
 }
+
+exports.replaceKeywords = (text, keywordsToReplace, replacement) => {
+    for (const keyword of keywordsToReplace) {
+        if (text.includes(keyword)) {
+            text = text.replace(keyword, replacement);
+        }
+    }
+    return text;
+};
