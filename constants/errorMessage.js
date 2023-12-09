@@ -6,6 +6,8 @@ const ERROR_MESSAGE = {
 	INVALID_ARGUMENT: "Invalid argument",
 	NICKNAME_ALREADY_EXISTS: "Nickname already exists",
 	SESSION_DESTROY_FAILED: "Failed to destroy session",
+	EMAIL_NOT_VERIFIED: "Email not verified",
+	EMAIL_SEND_FAILED: "Failed to send email",
 
 	LOCATION_NOT_FOUND: "Location not found",
 	REVIEW_NOT_FOUND: "Review not found",
