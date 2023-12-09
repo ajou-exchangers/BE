@@ -66,11 +66,3 @@ app.use(errorHandler);
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);
 });
-
-User.updateMany({}, { emailVerified: true })
-	.then((result) => {
-		console.log(result);
-	})
-	.catch((err) => {
-		console.log(err);
-	});
