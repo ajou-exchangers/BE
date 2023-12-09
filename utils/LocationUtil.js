@@ -35,11 +35,9 @@ exports.buildEqualLocationRegex = (searchParam) => {
     return new RegExp(`^${searchRegexString}$`, 'i');
 }
 
-exports.replaceKeywords = (text, keywordsToReplace, replacement) => {
-    for (const keyword of keywordsToReplace) {
-        if (text.includes(keyword)) {
-            text = text.replace(keyword, replacement);
-        }
+exports.replaceKeywords = (text, keyword, replacement) => {
+    if (text.includes(keyword)) {
+        text = text.replace(keyword, replacement);
     }
     return text;
 };
