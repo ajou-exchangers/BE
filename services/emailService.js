@@ -13,7 +13,7 @@ exports.sendMail = async (id, email) => {
 	});
 
 	const mailOptions = {
-		from: process.env.MAILER_EMAIL,
+		from: "Exchangers <${process.env.MAILER_EMAIL}>",
 		to: email,
 		subject: "Exchangers 가입 인증 메일입니다.",
 		html: `
@@ -38,12 +38,12 @@ exports.sendMail = async (id, email) => {
         `,
 	};
 
-	try {
-		await transporter.sendMail(mailOptions);
-	} catch (error) {
-		throw CustomError(
-			ERROR_CODES.INTERNAL_SERVER,
-			ERROR_MESSAGE.EMAIL_SEND_FAILED
-		);
-	}
+	transporter.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			throw CustomError(
+				ERROR_CODES.INTERNAL_SERVER,
+				ERROR_MESSAGE.EMAIL_SEND_FAILED
+			);
+		}
+	});
 };
