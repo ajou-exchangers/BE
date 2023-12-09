@@ -33,15 +33,19 @@ exports.signupUser = async (email, password, nickname, imageUrl) => {
 
 exports.loginUser = async (req, email, password) => {
 	const user = await findUser(email, password);
-	if (user) {
-		req.session.userId = user._id;
-		return new UserInfoResponse(user);
-	} else {
+	if (!user)
 		throw CustomError(
 			ERROR_CODES.UNAUTHORIZED,
 			ERROR_MESSAGE.INVALID_ARGUMENT
 		);
-	}
+	if (!user.emailVerified)
+		throw CustomError(
+			ERROR_CODES.UNAUTHORIZED,
+			ERROR_MESSAGE.EMAIL_NOT_VERIFIED
+		);
+
+	req.session.userId = user._id;
+	return new UserInfoResponse(user);
 };
 
 exports.logoutUser = async (req) => {
