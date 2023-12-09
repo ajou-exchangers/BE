@@ -7,6 +7,7 @@ const userSchema = new Schema({
 	nickname: { type: String, required: true, unique: true },
 	profile: { type: String },
 	role: { type: String, default: "user" },
+	emailVerified: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("User", userSchema);
