@@ -23,7 +23,7 @@ exports.readLocations = async (searchParam, categoryParam) => {
 
 exports.readLocation = async (locationId) => {
     const location = await Location.findById(locationId);
-    if (!location||!location.isVisible) {
+    if (!location || !location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
     const reviews = await Review.find({location: locationId})
@@ -33,45 +33,28 @@ exports.readLocation = async (locationId) => {
             select: 'email nickname profile',
         }).sort({createdAt: -1});
     return new LocationResponse({location, reviews});
-    ;
 }
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
-    try {
-        const enName = await LocationUtil.translateText(applyLocationRequest.koName, 'ko', 'en');
-        const enAddress = await LocationUtil.translateText(applyLocationRequest.koAddress, 'ko', 'en');
-        const location = await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
-        await location.save();
-    } catch (e) {
-        if (e.name === "ValidationError") {
-            throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
-        } else {
-            throw CustomError(e.status, e.message);
-        }
-    }
+    const enName = await LocationUtil.translateText(applyLocationRequest.koName, 'ko', 'en');
+    const enAddress = await LocationUtil.translateText(applyLocationRequest.koAddress, 'ko', 'en');
+    const location = await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
+    await location.save();
 }
 
 exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     const location = await Location.findById(locationId);
-    if (!location||!location.isVisible) {
+    if (!location || !location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
-    try {
-        const enName = await LocationUtil.translateText(locationUpdateRequest.koName, 'ko', 'en');
-        const enAddress = await LocationUtil.translateText(locationUpdateRequest.koAddress, 'ko', 'en');
-        const locationUpdate = await UpdateLocation.create({
-            ...locationUpdateRequest,
-            user: userId,
-            enName,
-            enAddress,
-            location: location._id
-        });
-        await locationUpdate.save();
-    } catch (e) {
-        if (e.name === "ValidationError") {
-            throw CustomError(ERROR_CODES.BAD_REQUEST, e.message);
-        } else {
-            throw CustomError(e.status, e.message);
-        }
-    }
+    const enName = await LocationUtil.translateText(locationUpdateRequest.koName, 'ko', 'en');
+    const enAddress = await LocationUtil.translateText(locationUpdateRequest.koAddress, 'ko', 'en');
+    const locationUpdate = await UpdateLocation.create({
+        ...locationUpdateRequest,
+        user: userId,
+        enName,
+        enAddress,
+        location: location._id
+    });
+    await locationUpdate.save();
 }

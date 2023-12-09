@@ -3,6 +3,8 @@ const Response = require("../dto/response/Response");
 const LocationApplyRequest = require("../dto/location/LocationApplyRequest");
 const LocationUpdateRequest = require("../dto/location/LocationUpdateRequest");
 const RESPONSE_MESSAGE = require("../constants/responseMessage");
+const CustomError = require("../utils/CustomError");
+const ERROR_CODES = require("../constants/errorCodes");
 
 exports.readLocations = async (req, res, next) => {
 	try {
@@ -34,6 +36,9 @@ exports.applyLocation = async (req, res, next) => {
         await LocationService.applyLocation(locationApplyRequest, req.session.userId, imageUrl);
         res.status(201).json(new Response(RESPONSE_MESSAGE.APPLY_LOCATION));
     } catch (err) {
+        if (err.name === "ValidationError") {
+            next(CustomError(ERROR_CODES.BAD_REQUEST, err.message));
+        }
         next(err);
     }
 }
@@ -46,6 +51,9 @@ exports.updateLocation = async (req, res, next) => {
         await LocationService.updateLocation(locationUpdateRequest, req.session.userId, locationId);
         res.status(200).json(new Response(RESPONSE_MESSAGE.UPDATE_LOCATION));
     } catch (err) {
+        if (err.name === "ValidationError") {
+            next(CustomError(ERROR_CODES.BAD_REQUEST, err.message));
+        }
         next(err);
     }
 }
