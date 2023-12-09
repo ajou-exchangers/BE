@@ -49,7 +49,6 @@ const keywordRouter = require("./routes/keyword");
 const reviewRouter = require("./routes/review");
 const boardRouter = require("./routes/board");
 const s3Router = require("./routes/s3");
-const User = require("./models/User");
 
 app.use("/api/exchangers/v1", indexRouter);
 app.use("/api/exchangers/v1/auth", authRouter);

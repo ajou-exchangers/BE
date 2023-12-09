@@ -4,6 +4,8 @@ const ERROR_MESSAGE = require("../constants/errorMessage");
 const UserInfoResponse = require("../dto/response/UserInfoResponse");
 const User = require("../models/User");
 const CustomError = require("../utils/CustomError");
+const { decrypt } = require("../utils/cryptoUtils");
+const { sendMail } = require("./emailService");
 const { createUser, findUser, findUserByNickname } = require("./userService");
 
 exports.signupUser = async (email, password, nickname, imageUrl) => {
@@ -25,20 +27,25 @@ exports.signupUser = async (email, password, nickname, imageUrl) => {
 			ERROR_MESSAGE.USER_ALREADY_EXISTS
 		);
 
-	await createUser(email, password, nickname, imageUrl);
+	const user = await createUser(email, password, nickname, imageUrl);
+	await sendMail(user._id.toString(), email);
 };
 
 exports.loginUser = async (req, email, password) => {
 	const user = await findUser(email, password);
-	if (user) {
-		req.session.userId = user._id;
-		return new UserInfoResponse(user);
-	} else {
+	if (!user)
 		throw CustomError(
 			ERROR_CODES.UNAUTHORIZED,
 			ERROR_MESSAGE.INVALID_ARGUMENT
 		);
-	}
+	if (!user.emailVerified)
+		throw CustomError(
+			ERROR_CODES.UNAUTHORIZED,
+			ERROR_MESSAGE.EMAIL_NOT_VERIFIED
+		);
+
+	req.session.userId = user._id;
+	return new UserInfoResponse(user);
 };
 
 exports.logoutUser = async (req) => {
@@ -66,6 +73,19 @@ exports.checkNicknameDup = async (nickname) => {
 			ERROR_MESSAGE.NICKNAME_ALREADY_EXISTS
 		);
 	}
+};
+
+exports.verifyEmail = async (id) => {
+	const user = await User.findById(decrypt(id));
+	if (!user) {
+		throw CustomError(
+			ERROR_CODES.BAD_REQUEST,
+			ERROR_MESSAGE.USER_NOT_FOUND
+		);
+	}
+
+	user.emailVerified = true;
+	await user.save();
 };
 
 checkDomain = (email) => {

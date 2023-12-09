@@ -3,6 +3,7 @@ const {
 	loginUser,
 	logoutUser,
 	checkNicknameDup,
+	verifyEmail,
 } = require("../services/authService");
 
 exports.signupUser = async (req, res, next) => {
@@ -40,6 +41,17 @@ exports.checkNicknameDup = async (req, res, next) => {
 	try {
 		await checkNicknameDup(req.params.nickname);
 		res.status(200).send("nickname is available");
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.verifyEmail = async (req, res, next) => {
+	try {
+		const { user } = req.query;
+		await verifyEmail(user);
+		res.status(200).send("email verified");
+		// TODO: redirect to FE login page
 	} catch (error) {
 		next(error);
 	}

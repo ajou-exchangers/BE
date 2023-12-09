@@ -48,6 +48,7 @@ exports.createUser = async (email, password, nickname, imageUrl) => {
 		profile: imageUrl,
 	});
 	await user.save();
+	return user;
 };
 
 exports.getUserInfo = async (userId) => {

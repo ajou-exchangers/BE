@@ -22,5 +22,6 @@ router.post(
 );
 router.post("/signout", checkAuthenticated, authController.logoutUser);
 router.get("/check-nickname/:nickname", authController.checkNicknameDup);
+router.get("/verify-email", authController.verifyEmail);
 
 module.exports = router;
