@@ -38,7 +38,7 @@ exports.logoutUser = async (req, res, next) => {
 
 exports.checkNicknameDup = async (req, res, next) => {
 	try {
-		await checkNicknameDup(req.body.nickname);
+		await checkNicknameDup(req.params.nickname);
 		res.status(200).send("nickname is available");
 	} catch (error) {
 		next(error);
