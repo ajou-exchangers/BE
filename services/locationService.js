@@ -36,6 +36,11 @@ exports.readLocation = async (locationId) => {
 }
 
 exports.applyLocation = async (applyLocationRequest, userId, image) => {
+    const keyword = "아주대점";
+    const replacement = "아주대학교점";
+
+    applyLocationRequest.koName = LocationUtil.replaceKeywords(applyLocationRequest.koName, keyword, replacement);
+
     const location = await Location.findOne({
         koName: {$regex: LocationUtil.buildEqualLocationRegex(applyLocationRequest.koName)},
         latitude: applyLocationRequest.latitude,
@@ -51,6 +56,10 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
 }
 
 exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
+    const keyword = "아주대점";
+    const replacement = "아주대학교점";
+
+    locationUpdateRequest.koName = LocationUtil.replaceKeywords(locationUpdateRequest.koName, keyword, replacement);
     const location = await Location.findById(locationId);
     if (!location || !location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
