@@ -4,6 +4,7 @@ const ERROR_CODES = {
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
 	INTERNAL_SERVER: 500,
+	CONFLICT:409,
 };
 
 module.exports = ERROR_CODES;
