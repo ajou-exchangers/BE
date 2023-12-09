@@ -5,23 +5,20 @@ const ivBuffer = Buffer.from(process.env.CRYPTO_IV, "hex");
 
 exports.encrypt = (text) => {
 	const encipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, ivBuffer);
-	const result = Buffer.concat([
-		encipher.update(text, "utf8"),
-		encipher.final(),
-	]);
+	const result = Buffer.concat([encipher.update(text), encipher.final()]);
 	return result.toString("base64");
 };
 
 exports.decrypt = (text) => {
-	const encryptedText = Buffer.from(text, "base64");
+	if (!text) return null;
 	const decipher = crypto.createDecipheriv(
 		"aes-256-cbc",
 		keyBuffer,
 		ivBuffer
 	);
 	const result = Buffer.concat([
-		decipher.update(encryptedText),
+		decipher.update(text, "base64"),
 		decipher.final(),
 	]);
-	return result.toString("utf8");
+	return result.toString();
 };
