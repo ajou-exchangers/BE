@@ -5,6 +5,7 @@ const {findUser} = require("./userService");
 const CustomError = require("../utils/CustomError");
 const ERROR_CODES = require("../constants/errorCodes");
 const ERROR_MESSAGE = require("../constants/errorMessage");
+const LocationUtil = require("../utils/LocationUtil");
 
 exports.adminLogin = async ({email, password}) => {
     const user = await findUser(email, password);
@@ -48,12 +49,21 @@ exports.getNotAcceptedLocation = async (locationId) => {
 };
 
 exports.acceptAddLocation = async (locationId) => {
-    const acceptLocation = await Location.findOne({isVisible: false, _id: locationId});
-    if (!acceptLocation) {
+    const noneAcceptLocation = await Location.findOne({isVisible: false, _id: locationId});
+    if (!noneAcceptLocation) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
-    acceptLocation.isVisible = true;
-    await acceptLocation.save();
+    const location = await Location.findOne({
+        koName: {$regex: LocationUtil.buildEqualLocationRegex(noneAcceptLocation.koName)},
+        latitude: noneAcceptLocation.latitude,
+        longitude: noneAcceptLocation.longitude,
+        isVisible: true,
+    });
+    if (location) {
+        throw CustomError(ERROR_CODES.CONFLICT, ERROR_MESSAGE.LOCATION_ADD_CONFLICT);
+    }
+    noneAcceptLocation.isVisible = true;
+    await noneAcceptLocation.save();
 }
 
 exports.rejectAddLocation = async (locationId) => {
