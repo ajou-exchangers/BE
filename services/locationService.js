@@ -39,7 +39,7 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
     const keyword = "아주대점";
     const replacement = "아주대학교점";
 
-    applyLocationRequest.koName = LocationUtil.replaceKeywords(applyLocationRequest.koName, keyword, replacement);
+    const replaceKeyword = LocationUtil.replaceKeywords(applyLocationRequest.koName, keyword, replacement);
 
     const location = await Location.findOne({
         koName: {$regex: LocationUtil.buildEqualLocationRegex(applyLocationRequest.koName)},
@@ -50,7 +50,7 @@ exports.applyLocation = async (applyLocationRequest, userId, image) => {
     if (location) {
         throw CustomError(ERROR_CODES.CONFLICT, ERROR_MESSAGE.LOCATION_ADD_CONFLICT);
     }
-    const enName = await LocationUtil.translateText(applyLocationRequest.koName, 'ko', 'en');
+    const enName = await LocationUtil.translateText(replaceKeyword, 'ko', 'en');
     const enAddress = await LocationUtil.translateText(applyLocationRequest.koAddress, 'ko', 'en');
     await Location.create({...applyLocationRequest, user: userId, image, enName, enAddress});
 }
@@ -59,12 +59,12 @@ exports.updateLocation = async (locationUpdateRequest, userId, locationId) => {
     const keyword = "아주대점";
     const replacement = "아주대학교점";
 
-    locationUpdateRequest.koName = LocationUtil.replaceKeywords(locationUpdateRequest.koName, keyword, replacement);
+    const replaceKeyword = LocationUtil.replaceKeywords(locationUpdateRequest.koName, keyword, replacement);
     const location = await Location.findById(locationId);
     if (!location || !location.isVisible) {
         throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.LOCATION_NOT_FOUND);
     }
-    const enName = await LocationUtil.translateText(locationUpdateRequest.koName, 'ko', 'en');
+    const enName = await LocationUtil.translateText(replaceKeyword, 'ko', 'en');
     const enAddress = await LocationUtil.translateText(locationUpdateRequest.koAddress, 'ko', 'en');
     await UpdateLocation.create({
         ...locationUpdateRequest,
