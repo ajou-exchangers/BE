@@ -17,7 +17,7 @@ router.post(
 router.put(
 	"/:postId",
 	checkAuthenticated,
-	upload.none(),
+	upload.single("image"),
 	boardController.updatePost
 );
 router.delete("/:postId", checkAuthenticated, boardController.deletePost);

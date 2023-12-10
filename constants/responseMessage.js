@@ -19,6 +19,16 @@ const RESPONSE_MESSAGE = {
 	USER_LOGGED_OUT: "User logged out successfully.",
 	NICKNAME_AVAILABLE: "Nickname is available.",
 	EMAIL_VERIFIED: "Email verified.",
+
+	POST_CREATED: "Post created successfully.",
+	POST_UPDATED: "Post updated successfully.",
+	POST_DELETED: "Post deleted successfully.",
+	POST_LIKED: "Post liked: ",
+
+	COMMENT_CREATED: "Comment created successfully.",
+	COMMENT_UPDATED: "Comment updated successfully.",
+	COMMENT_DELETED: "Comment deleted successfully.",
+	COMMENT_LIKED: "Comment liked: ",
 };
 
 module.exports = RESPONSE_MESSAGE;
