@@ -1,3 +1,4 @@
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
 const {
 	findPost,
 	findAllPosts,
@@ -37,7 +38,7 @@ exports.createPost = async (req, res, next) => {
 		const imageUrl = req.file ? req.file.location : null;
 		const { title, content } = req.body;
 		await createPost(req, title, content, imageUrl);
-		res.status(201).send("post created");
+		res.status(201).send(RESPONSE_MESSAGE.POST_CREATED);
 	} catch (error) {
 		next(error);
 	}
@@ -49,7 +50,7 @@ exports.updatePost = async (req, res, next) => {
 		const { postId } = req.params;
 		const { title, content } = req.body;
 		await updatePost(req, postId, title, content, imageUrl);
-		res.status(200).send("post updated");
+		res.status(200).send(RESPONSE_MESSAGE.POST_UPDATED);
 	} catch (error) {
 		next(error);
 	}
@@ -59,7 +60,7 @@ exports.deletePost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
 		await deletePost(req, postId);
-		res.status(200).send("post deleted");
+		res.status(200).send(RESPONSE_MESSAGE.POST_DELETED);
 	} catch (error) {
 		next(error);
 	}
@@ -68,8 +69,8 @@ exports.deletePost = async (req, res, next) => {
 exports.likePost = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
-		liked = await likePost(req, postId);
-		res.status(200).send("post liked: " + liked);
+		const liked = await likePost(req, postId);
+		res.status(200).send(RESPONSE_MESSAGE.POST_LIKED + liked);
 	} catch (error) {
 		next(error);
 	}
@@ -80,7 +81,7 @@ exports.createComment = async (req, res, next) => {
 		const { postId } = req.params;
 		const { content } = req.body;
 		await createComment(req, postId, content);
-		res.status(201).send("comment created");
+		res.status(201).send(RESPONSE_MESSAGE.COMMENT_CREATED);
 	} catch (error) {
 		next(error);
 	}
@@ -91,7 +92,7 @@ exports.updateComment = async (req, res, next) => {
 		const { postId, commentId } = req.params;
 		const { content } = req.body;
 		await updateComment(req, postId, commentId, content);
-		res.status(200).send("comment updated");
+		res.status(200).send(RESPONSE_MESSAGE.COMMENT_UPDATED);
 	} catch (error) {
 		next(error);
 	}
@@ -101,7 +102,7 @@ exports.deleteComment = async (req, res, next) => {
 	try {
 		const { postId, commentId } = req.params;
 		await deleteComment(req, postId, commentId);
-		res.status(200).send("comment deleted");
+		res.status(200).send(RESPONSE_MESSAGE.COMMENT_DELETED);
 	} catch (error) {
 		next(error);
 	}
@@ -110,8 +111,8 @@ exports.deleteComment = async (req, res, next) => {
 exports.likeComment = async (req, res, next) => {
 	try {
 		const { postId, commentId } = req.params;
-		liked = await likeComment(req, postId, commentId);
-		res.status(200).send("comment liked: " + liked);
+		const liked = await likeComment(req, postId, commentId);
+		res.status(200).send(RESPONSE_MESSAGE.COMMENT_LIKED + liked);
 	} catch (error) {
 		next(error);
 	}
