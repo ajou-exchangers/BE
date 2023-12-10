@@ -15,13 +15,11 @@ exports.sendMail = async (id, email) => {
 	const mailOptions = {
 		from: "Exchangers <${process.env.MAILER_EMAIL}>",
 		to: email,
-		subject: "Exchangers 가입 인증 메일입니다.",
+		subject: "Exchangers Registration Confirmation Email",
 		html: `
-            <h1>Exchangers에 가입해주셔서 감사합니다.</h1>
-            <p>이메일 인증하기 버튼을 누르시면 이메일 인증이 완료됩니다.</p>
-            <a href="${
-				process.env.API_ENDPOINT
-			}/auth/verify-email?user=${encrypt(id)}"
+			<h1>Thank you for registering with Exchangers.</h1>
+			<p>Click on the 'Verify Email' button to complete the email verification.</p>
+			<a href="${process.env.API_ENDPOINT}/auth/verify-email?user=${encrypt(id)}"
 			style="
 				display: inline-block;
 				background-color: #6d5c98;
@@ -33,8 +31,8 @@ exports.sendMail = async (id, email) => {
 				border-radius: 12px;
 				font-size: 1rem;
 				"
-	  		>
-			이메일 인증하기</a>
+			>
+			Verify Email</a>
         `,
 	};
 
