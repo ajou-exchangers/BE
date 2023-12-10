@@ -33,7 +33,7 @@ exports.createPost = async (req, title, content, imageUrl) => {
 	await post.save();
 };
 
-exports.updatePost = async (req, postId, title, content) => {
+exports.updatePost = async (req, postId, title, content, imageUrl) => {
 	const post = await Post.findById(postId);
 	if (!post)
 		throw CustomError(ERROR_CODES.NOT_FOUND, ERROR_MESSAGE.POST_NOT_FOUND);
@@ -45,6 +45,7 @@ exports.updatePost = async (req, postId, title, content) => {
 
 	post.title = title;
 	post.content = content;
+	if (imageUrl) post.imageUrl = imageUrl;
 	post.updatedAt = Date.now();
 	await post.save();
 };
