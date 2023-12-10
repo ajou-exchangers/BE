@@ -1,3 +1,4 @@
+const RESPONSE_MESSAGE = require("../constants/responseMessage");
 const {
 	signupUser,
 	loginUser,
@@ -11,7 +12,7 @@ exports.signupUser = async (req, res, next) => {
 		const imageUrl = req.file ? req.file.location : null;
 		const { email, password, nickname } = req.body;
 		await signupUser(email, password, nickname, imageUrl);
-		res.status(201).send("user created");
+		res.status(201).send(RESPONSE_MESSAGE.USER_CREATED);
 	} catch (error) {
 		next(error);
 	}
@@ -31,7 +32,7 @@ exports.logoutUser = async (req, res, next) => {
 	try {
 		await logoutUser(req);
 		res.clearCookie("exchangers.sid");
-		res.status(200).send("user logged out");
+		res.status(200).send(RESPONSE_MESSAGE.USER_LOGGED_OUT);
 	} catch (error) {
 		next(error);
 	}
@@ -40,7 +41,7 @@ exports.logoutUser = async (req, res, next) => {
 exports.checkNicknameDup = async (req, res, next) => {
 	try {
 		await checkNicknameDup(req.params.nickname);
-		res.status(200).send("nickname is available");
+		res.status(200).send(RESPONSE_MESSAGE.NICKNAME_AVAILABLE);
 	} catch (error) {
 		next(error);
 	}
@@ -50,8 +51,7 @@ exports.verifyEmail = async (req, res, next) => {
 	try {
 		const { user } = req.query;
 		await verifyEmail(user);
-		res.status(200).send("email verified");
-		// TODO: redirect to FE login page
+		res.status(200).send(RESPONSE_MESSAGE.EMAIL_VERIFIED);
 	} catch (error) {
 		next(error);
 	}
